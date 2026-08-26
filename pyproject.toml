@@ -1,0 +1,10 @@
+[project]
+name = "f5-riskai"
+version = "0.1.0"
+description = "ML prototype for stroke risk estimation"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.backends._legacy:_Backend"
