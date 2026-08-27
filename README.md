@@ -13,3 +13,25 @@ Desarrollar un sistema que permita predecir la probabilidad de sufrir un ictus b
 - **FastAPI** — Backend y API REST
 - **Vue.js** — Frontend
 - **Git/GitHub** — Control de versiones
+
+## Entorno de desarrollo
+
+### Requisitos
+
+- Python >= 3.10
+
+### Configuración
+
+```bash
+# Crear entorno virtual
+python -m venv .venv
+
+# Activar entorno (Windows)
+.venv\Scripts\activate
+
+# Activar entorno (macOS/Linux)
+source .venv/bin/activate
+
+# Instalar dependencias
+pip install -r requirements.txt
+```
