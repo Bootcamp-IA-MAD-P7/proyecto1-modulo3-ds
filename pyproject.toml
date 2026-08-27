@@ -4,6 +4,14 @@ version = "0.1.0"
 description = "ML prototype for stroke risk estimation"
 requires-python = ">=3.10"
 license = {text = "MIT"}
+dependencies = [
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "matplotlib",
+    "seaborn",
+    "joblib",
+]
 
 [build-system]
 requires = ["setuptools>=64"]
