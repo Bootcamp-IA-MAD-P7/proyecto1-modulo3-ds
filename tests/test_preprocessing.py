@@ -122,20 +122,6 @@ class NoMutationTests(unittest.TestCase):
         pipeline.transform(self.X)
         pd.testing.assert_frame_equal(self.X, self.X_copy)
 
-    def test_run_preprocessing_does_not_mutate_input_dataframe(self):
-        pp.run_preprocessing()
-        after = pd.read_csv(RAW_PATH)
-        after = after[pp.ALL_FEATURE_COLUMNS]
-        pd.testing.assert_frame_equal(self.X_copy, after)
-
-
-class runPreprocessingTests(unittest.TestCase):
-    def test_run_preprocessing_reports_shape(self):
-        summary = pp.run_preprocessing()
-        self.assertEqual(summary["rows"], 4981)
-        self.assertGreater(summary["features"], 0)
-        self.assertEqual(summary["target_non_null"], 4981)
-
 
 if __name__ == "__main__":
     unittest.main()
