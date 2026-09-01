@@ -11,6 +11,9 @@ dependencies = [
     "matplotlib",
     "seaborn",
     "joblib",
+    "fastapi",
+    "uvicorn",
+    "httpx",
 ]
 
 [build-system]
