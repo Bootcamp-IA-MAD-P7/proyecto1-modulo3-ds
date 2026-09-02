@@ -32,3 +32,11 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Transient dev-server logs (uvicorn / vite background).
+.venv_api_out.txt
+.venv_api_err.txt
+.vite_out.txt
+.vite_err.txt
+frontend/.vite_out.txt
+frontend/.vite_err.txt
