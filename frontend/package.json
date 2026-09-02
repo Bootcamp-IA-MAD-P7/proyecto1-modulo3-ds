@@ -1,0 +1,25 @@
+{
+  "name": "f5-riskai-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "F5 RiskAI - AI Stroke Risk Assessment dashboard (Vue 3 + Vite)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/test-utils": "^2.4.6",
+    "happy-dom": "^15.11.7",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8"
+  }
+}
