@@ -1,24 +1,31 @@
 <script setup>
 /**
- * F5 RiskAI dashboard (content view, rendered inside AppLayout).
- * Layout (reorganized for more air / hierarchy):
- *   - Top row:   Patient Assessment (60%) | Neural Visualization + Resumen (40%)
- *   - Below:     Risk Result (full width)
- *   - Below:     Risk Analysis (factors) | Model Metrics (breathing row)
- * Prediction flow form -> service -> result/analysis is unchanged.
+ * Análisis — multimodal analysis view.
+ *
+ * The "Análisis" page of F5 RiskAI. It hosts the full multimodal flow:
+ *
+ *   DATOS DEL PACIENTE ─► MODELO ML ─► RESULTADO IA ─► BRAIN 3D (visual)
+ *   IMAGEN CEREBRAL   ─► MODELO CNN ─► (preparado, futura conexión)
+ *
+ * IMPORTANT:
+ *   - The tabular prediction flow (form -> predictStroke -> result) is reused
+ *     from the existing components/services and is UNCHANGED.
+ *   - The Brain3D and ImageAnalysis areas are VISUAL/UX only; no CNN, no
+ *     Grad-CAM, no invented results, no medical localization claims.
+ *   - It never creates endpoints or changes the API contract.
  */
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import PatientAssessmentForm from '@/components/PatientAssessmentForm.vue'
-import NeuralVisualization from '@/components/NeuralVisualization.vue'
 import PredictionResult from '@/components/PredictionResult.vue'
 import RiskAnalysisModal from '@/components/RiskAnalysisModal.vue'
 import LoadingState from '@/components/LoadingState.vue'
 import ErrorState from '@/components/ErrorState.vue'
 import FactorsCard from '@/components/FactorsCard.vue'
-import ModelPerformance from '@/components/ModelPerformance.vue'
-import SummaryCards from '@/components/SummaryCards.vue'
+import Brain3D from '@/components/Brain3D.vue'
+import ImageAnalysis from '@/components/ImageAnalysis.vue'
+import AnalysisStatus from '@/components/AnalysisStatus.vue'
 import { predictStroke } from '@/services/predictionService.js'
-import { t, state, optionLabel } from '@/store.js'
+import { t, optionLabel } from '@/store.js'
 
 const result = ref(null)
 const loading = ref(false)
@@ -26,37 +33,55 @@ const errorMessage = ref('')
 const modalOpen = ref(false)
 const lastPayload = ref(null)
 
-const resultLabel = computed(() =>
-  result.value ? (result.value.prediction === 1 ? t('posLabel') : t('negLabel')) : '',
-)
+// Brain3D presents the analysis as a visual/UX state; it never claims to
+// locate a lesion. Mapping is EXPLICITLY a representation of the flow.
+const brainState = computed(() => {
+  if (loading.value) return 'analyzing'
+  if (result.value) return 'result'
+  return 'idle'
+})
 
-// "Resumen del análisis" block — real data only. Before a prediction it shows an
-// idle/empty state; after a prediction it uses exclusively the real API response.
-const summaryItems = computed(() => {
-  const entrada = lastPayload.value
-    ? `${Object.keys(lastPayload.value).length} ${t('summaryEntradaOf')}`
-    : t('summaryEntradaIdle')
+const brainLabel = computed(() => {
+  if (!result.value) return ''
+  return result.value.prediction === 1 ? t('posHint') : t('negHint')
+})
 
-  const estado = loading.value
-    ? t('summaryEstadoLoading')
-    : result.value
-      ? t('summaryEstadoDone')
-      : errorMessage.value
-        ? t('summaryEstadoError')
-        : t('summaryEstado')
+const mlStatusTone = computed(() => {
+  if (loading.value) return 'active'
+  if (errorMessage.value) return 'error'
+  if (result.value) return 'success'
+  return 'neutral'
+})
 
-  const resultado = loading.value
-    ? t('summaryResultadoLoading')
-    : result.value
-      ? `${resultLabel.value} · ${(result.value.probability * 100).toFixed(2)}%`
-      : t('summaryResultadoIdle')
+const mlStatusLabel = computed(() => {
+  if (loading.value) return t('summaryEstadoLoading')
+  if (errorMessage.value) return t('summaryEstadoError')
+  if (result.value) return t('summaryEstadoDone')
+  return t('summaryEstado')
+})
 
-  return [
-    { label: t('statusLabel'), value: estado },
-    { label: t('modelLabel'), value: 'Logistic Regression' },
-    { label: t('inputLabel'), value: entrada },
-    { label: t('resultLabel'), value: resultado },
-  ]
+let progressTimer = null
+const percent = ref(0)
+
+watch(brainState, (s) => {
+  if (progressTimer) clearInterval(progressTimer)
+  progressTimer = null
+  if (s === 'analyzing') {
+    percent.value = 0
+    progressTimer = setInterval(() => {
+      percent.value = Math.min(100, percent.value + Math.round(Math.random() * 9))
+      if (percent.value >= 100) {
+        clearInterval(progressTimer)
+        progressTimer = null
+      }
+    }, 180)
+  } else if (s === 'result') {
+    percent.value = 100
+  }
+})
+
+onBeforeUnmount(() => {
+  if (progressTimer) clearInterval(progressTimer)
 })
 
 async function handleSubmit(payload) {
@@ -70,8 +95,7 @@ async function handleSubmit(payload) {
     const data = await predictStroke(payload)
     result.value = { prediction: data.prediction, probability: data.probability }
   } catch (err) {
-    errorMessage.value =
-      (err && err.message) || t('loadErrorDefault')
+    errorMessage.value = (err && err.message) || t('loadErrorDefault')
   } finally {
     loading.value = false
   }
@@ -109,21 +133,18 @@ function closeAnalysis() {
 </script>
 
 <template>
-  <div class="dashboard">
-    <div class="dashboard__intro">
-      <span class="dashboard__kicker">{{ t('kicker') }}</span>
-      <h1 class="dashboard__title">{{ t('title') }}</h1>
-      <p class="dashboard__subtitle">
-        {{ t('subtitle') }}
-      </p>
-      <p class="dashboard__disclaimer">
-        {{ t('disclaimer') }}
-      </p>
+  <div class="analyse">
+    <!-- Intro -->
+    <div class="analyse__intro">
+      <span class="analyse__kicker">{{ t('analysis.eyebrow') }}</span>
+      <h1 class="analyse__title">{{ t('analysis.title') }}</h1>
+      <p class="analyse__subtitle">{{ t('analysis.subtitle') }}</p>
+      <span class="analyse__flow">{{ t('analysis.flowNote') }}</span>
     </div>
 
-    <!-- SECTION 1 (top): Patient Assessment (60%) | Neural + Resumen (40%) -->
-    <div class="dashboard__top">
-      <section class="panel panel--assess" aria-label="Patient assessment">
+    <!-- TOP ROW: Patient data (ML) | Brain 3D -->
+    <div class="analyse__top">
+      <section class="panel panel--data" aria-label="Datos del paciente">
         <div class="card-head">
           <span class="card-head__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -140,49 +161,48 @@ function closeAnalysis() {
           <div class="card-head__text">
             <span class="panel__kicker">{{ t('assessEyebrow') }}</span>
             <h2 class="card-head__title">{{ t('assessTitle') }}</h2>
-            <p class="card-head__subtitle">
-              {{ t('assessSubtitle') }}
-            </p>
+            <p class="card-head__subtitle">{{ t('assessSubtitle') }}</p>
           </div>
         </div>
         <PatientAssessmentForm @submit="handleSubmit" />
       </section>
 
-      <section class="panel panel--side" aria-label="Neural visualization and summary">
+      <section class="panel panel--brain" aria-label="Cerebro 3D">
         <div class="card-head">
           <span class="card-head__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <circle cx="5" cy="19" r="1.6" fill="currentColor" />
               <circle cx="12" cy="6" r="1.6" fill="currentColor" />
               <circle cx="19" cy="19" r="1.6" fill="currentColor" />
-              <circle cx="9" cy="16" r="1.6" fill="currentColor" />
-              <circle cx="16" cy="13" r="1.6" fill="currentColor" />
               <path d="M6 18.5 11 7m8 12-3-6M5 19l4-3m11 3-5-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
           </span>
           <div class="card-head__text">
-            <span class="panel__kicker">{{ t('neuralEyebrow') }}</span>
-            <h2 class="card-head__title">{{ t('neuralTitle') }}</h2>
-            <p class="card-head__subtitle">{{ t('neuralSubtitle') }}</p>
+            <span class="panel__kicker">{{ t('brain.eyebrow') }}</span>
+            <h2 class="card-head__title">{{ t('brain.title') }}</h2>
+            <p class="card-head__subtitle">{{ t('brain.subtitle') }}</p>
           </div>
         </div>
 
-        <NeuralVisualization />
+        <Brain3D :state="brainState" :label="brainLabel" :percent="percent" />
 
-        <div class="dashboard__summary" aria-label="Resumen del análisis">
+        <div class="dashboard__summary">
           <h3 class="dashboard__summary-title">{{ t('summaryTitle') }}</h3>
+          <AnalysisStatus :tone="mlStatusTone" :label="mlStatusLabel" />
           <dl class="dashboard__summary-list">
-            <template v-for="item in summaryItems" :key="item.label">
-              <dt class="dashboard__summary-key">{{ item.label }}</dt>
-              <dd class="dashboard__summary-value">{{ item.value }}</dd>
-            </template>
+            <dt class="dashboard__summary-key">{{ t('modelLabel') }}</dt>
+            <dd class="dashboard__summary-value">Logistic Regression</dd>
+            <dt class="dashboard__summary-key">{{ t('inputLabel') }}</dt>
+            <dd class="dashboard__summary-value">
+              {{ lastPayload ? `${Object.keys(lastPayload).length} ${t('summaryEntradaOf')}` : t('summaryEntradaIdle') }}
+            </dd>
           </dl>
         </div>
       </section>
     </div>
 
-    <!-- SECTION 2: RISK RESULT (full width) -->
-    <section class="panel panel--result" aria-label="Prediction result">
+    <!-- RESULT: ML (full width) -->
+    <section class="panel panel--result" aria-label="Resultado del análisis de datos">
       <div class="card-head">
         <span class="card-head__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
@@ -217,36 +237,40 @@ function closeAnalysis() {
             <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" />
             <path d="M12 8v4l2.5 1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
           </svg>
-          <p class="panel__empty-text">
-            {{ t('emptyResult') }}
-          </p>
+          <p class="panel__empty-text">{{ t('emptyResult') }}</p>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3 (info): Risk Analysis | Model Metrics (breathing) -->
-    <div class="dashboard__info">
+    <!-- Factors row (if a case has been analyzed) -->
+    <div class="analyse__info">
       <FactorsCard v-if="lastPayload" :factors="factorsForDisplay()" />
-      <div v-else class="panel factors-slot" aria-label="Risk analysis">
-        <div class="card-head">
-          <span class="card-head__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="M4 9h16M4 15h16M4 6h10M4 18h10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
-            </svg>
-          </span>
-          <div class="card-head__text">
-            <span class="panel__kicker">Risk Analysis</span>
-            <h2 class="card-head__title">{{ t('impactSlotTitle') }}</h2>
-            <p class="card-head__subtitle">{{ t('impactSlotSubtitle') }}</p>
-          </div>
-        </div>
-        <p class="panel__empty-text">{{ t('impactSlotEmpty') }}</p>
-      </div>
-
-      <ModelPerformance />
     </div>
 
-    <SummaryCards />
+    <!-- IMAGE ANALYSIS -->
+    <section class="panel panel--image" aria-label="Análisis de imagen cerebral">
+      <div class="card-head">
+        <span class="card-head__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linejoin="round"
+            />
+            <circle cx="12" cy="13" r="3.2" fill="none" stroke="currentColor" stroke-width="1.7" />
+          </svg>
+        </span>
+        <div class="card-head__text">
+          <span class="panel__kicker">{{ t('imageAnalysis.eyebrow') }}</span>
+          <h2 class="card-head__title">{{ t('imageAnalysis.title') }}</h2>
+          <p class="card-head__subtitle">{{ t('imageAnalysis.subtitle') }}</p>
+        </div>
+      </div>
+
+      <ImageAnalysis />
+    </section>
   </div>
 
   <RiskAnalysisModal
@@ -259,11 +283,11 @@ function closeAnalysis() {
 </template>
 
 <style scoped>
-.dashboard__intro {
-  margin-bottom: 30px;
+.analyse__intro {
+  margin-bottom: 28px;
 }
 
-.dashboard__kicker {
+.analyse__kicker {
   font-size: 12px;
   font-weight: var(--w-700);
   text-transform: uppercase;
@@ -271,40 +295,38 @@ function closeAnalysis() {
   color: var(--color-accent-strong);
 }
 
-.dashboard__title {
-  font-size: 40px;
-  line-height: 1.12;
-  margin-top: 8px;
-  letter-spacing: -0.03em;
+.analyse__title {
+  font-size: var(--fs-h1);
+  margin-top: 6px;
 }
 
-.dashboard__subtitle {
-  margin-top: 12px;
-  font-size: 15.5px;
+.analyse__subtitle {
+  margin-top: 8px;
+  font-size: 15px;
   color: var(--color-ink-mute);
   max-width: 680px;
 }
 
-.dashboard__disclaimer {
-  margin-top: 6px;
-  font-size: 12.5px;
+.analyse__flow {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: var(--w-600);
   color: var(--color-ink-faint);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-pill);
+  background: var(--color-canvas-soft);
+  padding: 7px 16px;
 }
 
-/* SECTION 1: Patient Assessment (60%) | Neural + Summary (40%) */
-.dashboard__top {
+.analyse__top {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 58% 42%;
   gap: 28px;
   align-items: start;
 }
 
-/* SECTION 3 info row — breathing two-column distribution */
-.dashboard__info {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-  align-items: start;
+.analyse__info {
   margin-top: 28px;
 }
 
@@ -326,11 +348,48 @@ function closeAnalysis() {
   color: var(--color-accent-strong);
 }
 
-.panel--assess .card-head {
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
   margin-bottom: 18px;
 }
 
-.panel--side .card-head {
+.card-head__icon {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  color: var(--color-accent-strong);
+  border-radius: var(--radius-sm);
+  background: rgba(217, 169, 40, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-head__icon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.card-head__text {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-head__title {
+  font-size: 18px;
+  font-weight: var(--w-700);
+  color: var(--color-primary);
+  letter-spacing: -0.01em;
+}
+
+.card-head__subtitle {
+  font-size: 13px;
+  color: var(--color-ink-mute);
+}
+
+.panel--brain .card-head {
   margin-bottom: 16px;
 }
 
@@ -338,8 +397,8 @@ function closeAnalysis() {
   margin-top: 24px;
 }
 
-.panel--result .card-head {
-  margin-bottom: 18px;
+.panel--image {
+  margin-top: 24px;
 }
 
 .panel__body {
@@ -376,13 +435,15 @@ function closeAnalysis() {
   max-width: 300px;
 }
 
-/* "Resumen del análisis" block (right column, under the placeholder) */
 .dashboard__summary {
   margin-top: 18px;
   border: 1px solid var(--color-hairline);
   border-radius: var(--radius-lg);
   background: var(--color-card);
   padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .dashboard__summary-title {
@@ -391,13 +452,12 @@ function closeAnalysis() {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--color-accent-strong);
-  margin-bottom: 12px;
 }
 
 .dashboard__summary-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 18px;
+  gap: 8px 18px;
   margin: 0;
 }
 
@@ -417,31 +477,10 @@ function closeAnalysis() {
   overflow-wrap: anywhere;
 }
 
-.factors-slot {
-  min-height: 200px;
-}
-
-@media (max-width: 1180px) {
-  .dashboard__top {
-    grid-template-columns: 58% 42%;
-  }
-}
-
-/* Tablet: stack the top row into a single column; result stays full width. */
 @media (max-width: 980px) {
-  .dashboard__top {
+  .analyse__top {
     grid-template-columns: 1fr;
     gap: 20px;
-  }
-  .dashboard__info {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .dashboard__summary-list {
-    grid-template-columns: 1fr;
-    gap: 6px;
   }
 }
 </style>

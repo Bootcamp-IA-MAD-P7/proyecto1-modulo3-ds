@@ -1,0 +1,444 @@
+[2m12:17:10 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/components/ModelPerformance.vue" from "src/views/Dashboard.vue". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/views/Dashboard.vue[39m:20:31
+[33m  9  |  import ErrorState from '@/components/ErrorState.vue'
+  10 |  import FactorsCard from '@/components/FactorsCard.vue'
+  11 |  import ModelPerformance from '@/components/ModelPerformance.vue'
+     |                                ^
+  12 |  import SummaryCards from '@/components/SummaryCards.vue'
+  13 |  import { predictStroke } from '@/services/predictionService.js'[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 10)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:30:14 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:30:14 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:31:02 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:31:02 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:31:13 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:31:13 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:31:33 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:31:34 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:31:52 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:31:52 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:33:13 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:33:13 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:33:15 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:33:49 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:33:50 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:33:53 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:33:53 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:33:56 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:33:56 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:34:15 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:34:15 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:34:24 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:34:24 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:34:38 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:34:38 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:35:05 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:35:05 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:35:16 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:35:16 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:35:29 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:35:29 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:35:39 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:35:39 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:35:52 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:35:52 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:35:58 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:36:03 p. m.[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?
+[2m12:36:03 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/views/Login.vue" from "src/router/index.js". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/router/index.js[39m:11:31
+[33m  9  |        path: '/login',
+  10 |        name: 'login',
+  11 |        component: () => import('@/views/Login.vue'),
+     |                                ^
+  12 |      },
+  13 |      {[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 4)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m12:52:13 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/assets/logo.svg" from "src/components/AppSidebar.vue". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/components/AppSidebar.vue[39m:8:22
+[33m  1  |  import logoUrl from '@/assets/logo.svg'
+     |                       ^
+  2  |  
+  3  |  [39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 0)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m1:22:23 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/assets/logomedic.png" from "src/components/AppSidebar.vue". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/components/AppSidebar.vue[39m:8:22
+[33m  1  |  import logoUrl from '@/assets/logomedic.png'
+     |                       ^
+  2  |  
+  3  |  [39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 0)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m7:18:06 p. m.[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "@/assets/logomedic.png" from "src/components/AppSidebar.vue". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Personal/proyecto1-modulo3-ds/frontend/src/components/AppSidebar.vue[39m:8:22
+[33m  1  |  import logoUrl from '@/assets/logomedic.png'
+     |                       ^
+  2  |  import { t } from '@/store.js'
+  3  |  [39m
+      at TransformPluginContext._formatError (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at async file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 0)
+      at async TransformPluginContext.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Personal/proyecto1-modulo3-ds/frontend/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)

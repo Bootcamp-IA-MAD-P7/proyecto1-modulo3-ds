@@ -1,12 +1,13 @@
 <script setup>
 /**
- * Issue #033 - patient assessment form.
- *
+ * Patient assessment form (visual redesign).
  * Collects the 10 model features, validates them on the frontend (required,
  * ranges, exact categories), and only emits "submit" with a valid payload.
+ * The data contract / property names / categories are UNCHANGED.
  */
 import { reactive } from 'vue'
 import { FIELD_DEFINITIONS, NUMBER_RULES, isEmptyValue } from './formFields.js'
+import { fieldLabel, optionLabel, t, state } from '@/store.js'
 
 const emit = defineEmits(['submit'])
 
@@ -24,6 +25,8 @@ const model = reactive({
 })
 
 const touched = reactive({})
+// errors[key] stores a localized message descriptor { key } so the visible text
+// re-translates reactively when the user switches ES/EN (no reload needed).
 const errors = reactive({})
 
 const fieldKeys = FIELD_DEFINITIONS.map((f) => f.key)
@@ -38,39 +41,46 @@ function isNumberValid(field, value) {
   return true
 }
 
+function setError(field, msgKey) {
+  errors[field.key] = { key: msgKey }
+}
+
+/** Resolves the current, language-aware message for a field's error descriptor. */
+function errorText(fieldKey) {
+  const descriptor = errors[fieldKey]
+  if (!descriptor) return ''
+  return t(descriptor.key)
+}
+
 function validateField(field) {
   const value = model[field.key]
 
   if (isEmptyValue(field, value)) {
-    errors[field.key] = `${field.label} is required.`
+    setError(field, 'validation.required')
     return
   }
 
   if (field.type === 'number') {
     const num = Number(value)
     if (Number.isNaN(num)) {
-      errors[field.key] = `${field.label} must be a number.`
+      setError(field, 'validation.invalidNumber')
       return
     }
     const rule = NUMBER_RULES[field.key]
     if (rule) {
-      if (num < rule.min) {
-        errors[field.key] =
-          rule.max !== Infinity
-            ? `${field.label} must be between ${rule.min} and ${rule.max}.`
-            : `${field.label} must be ${rule.min} or greater.`
-        return
-      }
-      if (rule.max !== Infinity && num > rule.max) {
-        errors[field.key] = `${field.label} must be between ${rule.min} and ${rule.max}.`
+      const belowMin = num < rule.min
+      const aboveMax = rule.max !== Infinity && num > rule.max
+      if (belowMin || aboveMax) {
+        // age / avg_glucose_level / bmi have purpose-written, localized messages
+        // that already include the exact range from NUMBER_RULES.
+        setError(field, `validation.${field.key}`)
         return
       }
     }
   }
 
-  // Select fields: value must be one of the allowed options.
   if (field.type === 'select' && field.options && !field.options.includes(value)) {
-    errors[field.key] = `${field.label} has an invalid value.`
+    setError(field, 'validation.invalidSelect')
     return
   }
 
@@ -83,7 +93,6 @@ function onBlur(field) {
 }
 
 function onSubmit() {
-  // Touch all fields so errors surface right away.
   fieldKeys.forEach((key) => {
     touched[key] = true
     const field = FIELD_DEFINITIONS.find((f) => f.key === key)
@@ -94,8 +103,6 @@ function onSubmit() {
 
   const payload = {}
   for (const field of FIELD_DEFINITIONS) {
-    // The binary 0|1 toggles and all number fields are sent as numbers so the
-    // backend (Literal[0,1], age/glucose/bmi floats) validates them correctly.
     if (field.type === 'number' || field.asNumber) {
       payload[field.key] = Number(model[field.key])
     } else {
@@ -115,7 +122,7 @@ function onSubmit() {
         class="form__field"
       >
         <label class="form__label" :for="`field-${field.key}`">
-          {{ field.label }}
+          {{ fieldLabel(field.key) }}
         </label>
 
         <select
@@ -126,9 +133,9 @@ function onSubmit() {
           :class="{ 'form__control--error': touched[field.key] && errors[field.key] }"
           @blur="onBlur(field)"
         >
-          <option value="" disabled>Select…</option>
+          <option value="" disabled>{{ state.language === 'en' ? 'Select…' : 'Seleccionar…' }}</option>
           <option v-for="opt in field.options" :key="opt" :value="opt">
-            {{ opt }}
+            {{ optionLabel(field.key, opt) }}
           </option>
         </select>
 
@@ -150,12 +157,35 @@ function onSubmit() {
           class="form__error"
           role="alert"
         >
-          {{ errors[field.key] }}
+          {{ errorText(field.key) }}
         </p>
       </div>
     </div>
 
-    <button type="submit" class="form__submit">Analizar riesgo</button>
+    <button type="submit" class="form__submit">
+      <svg
+        class="form__submit-icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path
+          d="M12 3a7 7 0 0 0-7 7c0 4 4 6 7 7 3-1 7-3 7-7a7 7 0 0 0-7-7Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M12 10h.01M8.5 12h.01M15.5 12h.01M10 15h4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+        />
+      </svg>
+      {{ t('analyzeRisk') }}
+    </button>
   </form>
 </template>
 
@@ -163,40 +193,54 @@ function onSubmit() {
 .form__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
 .form__field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
 .form__label {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--color-text);
+  font-size: 12.5px;
+  font-weight: var(--w-600);
+  color: var(--color-ink);
 }
 
 .form__control {
   width: 100%;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-hairline);
+  border-radius: 8px;
   padding: 10px 12px;
   font-size: 14px;
-  background: var(--color-surface);
-  color: var(--color-text);
-  transition: border-color 0.15s ease;
+  background: var(--color-card);
+  color: var(--color-ink);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  appearance: none;
+}
+
+.form__control:hover {
+  border-color: rgba(23, 32, 51, 0.25);
+}
+
+:root[data-theme='dark'] .form__control:hover {
+  border-color: rgba(244, 201, 93, 0.35);
 }
 
 .form__control:focus {
   outline: none;
-  border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+  border-color: var(--color-accent-strong);
+  box-shadow: 0 0 0 3px rgba(244, 201, 93, 0.18);
 }
 
 .form__control--error {
   border-color: var(--color-risk);
+}
+
+.form__control--error:focus {
+  border-color: var(--color-risk);
+  box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.12);
 }
 
 .form__error {
@@ -205,26 +249,49 @@ function onSubmit() {
 }
 
 .form__submit {
-  margin-top: 18px;
+  margin-top: 24px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   border: none;
-  background: var(--color-accent);
-  color: #fff;
-  border-radius: 12px;
-  padding: 13px;
-  font-size: 16px;
-  font-weight: 650;
-  transition: background 0.15s ease;
+  background: var(--color-accent-strong);
+  color: var(--color-on-accent);
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: var(--w-700);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  box-shadow: var(--shadow-sm);
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.form__submit-icon {
+  width: 21px;
+  height: 21px;
+  color: var(--color-on-accent);
+  filter: drop-shadow(0 0 4px rgba(244, 201, 93, 0.4));
 }
 
 .form__submit:hover {
-  background: var(--color-accent-dark);
+  background: var(--color-accent-deep);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
-/* Single column on narrow screens. */
+.form__submit:active {
+  transform: translateY(0);
+}
+
 @media (max-width: 640px) {
   .form__grid {
     grid-template-columns: 1fr;
+  }
+  .form__submit {
+    width: 100%;
   }
 }
 </style>

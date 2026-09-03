@@ -7,7 +7,7 @@ describe('PredictionResult', () => {
     const wrapper = mount(PredictionResult, {
       props: { prediction: 0, probability: 0.018580961296622237 },
     })
-    expect(wrapper.text()).toContain('Negative')
+    expect(wrapper.text()).toContain('Negativo')
     expect(wrapper.text()).toContain('1.86%')
   })
 
@@ -15,7 +15,7 @@ describe('PredictionResult', () => {
     const wrapper = mount(PredictionResult, {
       props: { prediction: 1, probability: 0.85 },
     })
-    expect(wrapper.text()).toContain('Positive')
+    expect(wrapper.text()).toContain('Positivo')
     expect(wrapper.text()).toContain('85.00%')
   })
 
@@ -23,7 +23,8 @@ describe('PredictionResult', () => {
     const wrapper = mount(PredictionResult, {
       props: { prediction: 0, probability: 0.1 },
     })
-    expect(wrapper.text()).toContain('not a medical diagnosis')
+    expect(wrapper.text()).toContain('No sustituye la evaluación de un profesional sanitario')
+    expect(wrapper.text()).toContain('no un diagnóstico')
   })
 
   it('emits open-analysis from the "Ver análisis" button', async () => {
