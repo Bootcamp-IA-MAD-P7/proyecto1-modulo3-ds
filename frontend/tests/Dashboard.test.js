@@ -47,9 +47,10 @@ describe('Dashboard', () => {
     document.body.innerHTML = ''
   })
 
-  it('mounts and renders header + patient assessment + neural visualization', () => {
+  it('mounts and renders the dashboard intro + patient assessment + neural visualization', () => {
     wrapper = mount(Dashboard)
-    expect(wrapper.text()).toContain('F5 RiskAI')
+    expect(wrapper.text()).toContain('F5 RISKAI')
+    expect(wrapper.text()).toContain('Evaluación de riesgo de ictus')
     expect(wrapper.text()).toContain('Patient Assessment')
     expect(wrapper.text()).toContain('Neural Visualization')
     expect(wrapper.findComponent(NeuralVisualization).exists()).toBe(true)
@@ -106,7 +107,7 @@ async function nextTicks(n = 3) {
     predictStroke.mockResolvedValue({ prediction: 0, probability: 0.018580961296622237 })
     wrapper = mount(Dashboard)
     await submitForm(wrapper)
-    expect(wrapper.text()).toContain('Negative')
+    expect(wrapper.text()).toContain('Negativo')
     expect(wrapper.text()).toContain('1.86%')
   })
 
@@ -114,7 +115,7 @@ async function nextTicks(n = 3) {
     predictStroke.mockResolvedValue({ prediction: 1, probability: 0.85 })
     wrapper = mount(Dashboard)
     await submitForm(wrapper)
-    expect(wrapper.text()).toContain('Positive')
+    expect(wrapper.text()).toContain('Positivo')
     expect(wrapper.text()).toContain('85.00%')
   })
 
@@ -155,8 +156,10 @@ async function nextTicks(n = 3) {
     expect(document.body.textContent).not.toContain('Factores relevantes')
   })
 
-  it('renders the responsive dashboard grid layout', () => {
+  it('renders the responsive dashboard layout (top row + full-width result + info row)', () => {
     wrapper = mount(Dashboard)
-    expect(wrapper.find('.dashboard__grid').exists()).toBe(true)
+    expect(wrapper.find('.dashboard__top').exists()).toBe(true)
+    expect(wrapper.find('.panel--result').exists()).toBe(true)
+    expect(wrapper.find('.dashboard__info').exists()).toBe(true)
   })
 })

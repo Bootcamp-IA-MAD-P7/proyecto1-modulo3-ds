@@ -7,6 +7,7 @@
  * to" based on the input factors, which is safe, user-facing language.
  */
 import { computed } from 'vue'
+import { t } from '@/store.js'
 
 const emit = defineEmits(['close'])
 
@@ -23,15 +24,15 @@ const percent = computed(() => `${(props.probability * 100).toFixed(2)}%`)
 const positive = computed(() => props.prediction === 1)
 
 const headline = computed(() =>
-  positive.value
-    ? 'Riesgo elevado según el modelo'
-    : 'Riesgo no elevado según el modelo',
+  positive.value ? t('modalPosHeadline') : t('modalNegHeadline'),
 )
 
 const explanation = computed(() =>
-  positive.value
-    ? 'El modelo baseline ha dado un mayor peso a los factores de este caso, indicando una asociación importante entre ellos y el riesgo de ictus en los datos de entrenamiento.'
-    : 'El modelo baseline no detecta una asociación importante que eleve el riesgo en este caso, según los datos de entrenamiento.',
+  positive.value ? t('modalPosExplanation') : t('modalNegExplanation'),
+)
+
+const badge = computed(() =>
+  positive.value ? t('modalPosBadge') : t('modalNegBadge'),
 )
 
 /**
@@ -75,7 +76,10 @@ function handleClose() {
         data-testid="risk-modal"
       >
         <div class="modal-panel__head">
-          <h2 id="risk-modal-title" class="modal-panel__title">{{ headline }}</h2>
+          <div class="modal-panel__heading">
+            <span class="modal-panel__eyebrow">{{ t('modalEyebrow') }}</span>
+            <h2 id="risk-modal-title" class="modal-panel__title">{{ headline }}</h2>
+          </div>
           <button
             class="modal-panel__close"
             type="button"
@@ -87,36 +91,37 @@ function handleClose() {
         </div>
 
         <div class="modal-panel__body">
-          <div class="modal-panel__fact">
-            <span class="modal-panel__kicker">Stroke probability</span>
-            <span class="modal-panel__value" :class="{ 'is-positive': positive }">
+          <div class="modal-panel__fact" :class="{ 'is-positive': positive }">
+            <span class="modal-panel__kicker">{{ t('modalStrokeProb') }}</span>
+            <span class="modal-panel__value">
               {{ percent }}
+            </span>
+            <span class="modal-panel__badge" :class="{ 'is-positive': positive }">
+              {{ badge }}
             </span>
           </div>
 
           <p class="modal-panel__explanation">{{ explanation }}</p>
 
           <div class="modal-panel__factors">
-            <h3 class="modal-panel__subtitle">Factores relevantes introducidos</h3>
+            <h3 class="modal-panel__subtitle">{{ t('modalFactors') }}</h3>
             <ul class="modal-panel__list" v-if="relevantFactors.length">
               <li v-for="item in relevantFactors" :key="item.key" class="modal-panel__row">
                 <span class="modal-panel__row-label">{{ item.label }}</span>
                 <span class="modal-panel__row-value">{{ item.value }}</span>
               </li>
             </ul>
-            <p v-else class="modal-panel__empty">No hay factores disponibles.</p>
+            <p v-else class="modal-panel__empty">{{ t('modalNoFactors') }}</p>
           </div>
 
           <p class="modal-panel__disclaimer">
-            El modelo ha dado mayor peso a estas variables dentro del modelo
-            baseline. Esta herramienta es solo análisis predictivo y no
-            constituye un diagnóstico médico.
+            {{ t('modalDisclaimer') }}
           </p>
         </div>
 
         <div class="modal-panel__foot">
           <button class="modal-panel__close-btn" type="button" @click="handleClose">
-            Cerrar
+            {{ t('modalClose') }}
           </button>
         </div>
       </div>
@@ -128,94 +133,140 @@ function handleClose() {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(7, 20, 38, 0.55);
+  backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
   z-index: 1000;
+  animation: fadeBackdrop 0.18s var(--ease);
 }
 
 .modal-panel {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  max-width: 480px;
+  background: var(--color-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: 16px;
+  max-width: 500px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.28s var(--ease);
 }
 
 .modal-panel__head {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  padding: 18px 20px 12px;
-  border-bottom: 1px solid var(--color-border);
+  gap: 12px;
+  padding: 20px 22px 14px;
+  border-bottom: var(--color-hairline);
+}
+
+.modal-panel__heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modal-panel__eyebrow {
+  font-size: 11px;
+  font-weight: var(--w-700);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-strong);
 }
 
 .modal-panel__title {
   font-size: 17px;
+  letter-spacing: -0.01em;
+  color: var(--color-primary);
 }
 
 .modal-panel__close {
   border: none;
-  background: var(--color-bg);
-  border-radius: 8px;
+  background: var(--color-canvas-soft);
+  border-radius: var(--radius-sm);
   width: 32px;
   height: 32px;
   font-size: 22px;
   line-height: 1;
-  color: var(--color-text-soft);
+  color: var(--color-ink-mute);
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 
 .modal-panel__close:hover {
-  background: var(--color-border);
+  background: var(--color-hover-bg);
+  color: var(--color-primary);
 }
 
 .modal-panel__body {
-  padding: 18px 20px;
+  padding: 18px 22px;
 }
 
 .modal-panel__fact {
-  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+  background: var(--color-canvas-soft);
+  border: var(--color-hairline);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
 }
 
 .modal-panel__kicker {
-  display: block;
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--color-text-soft);
-  margin-bottom: 4px;
+  color: var(--color-ink-mute);
 }
 
 .modal-panel__value {
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: var(--w-700);
+  color: var(--color-accent-strong);
+  line-height: 1.1;
 }
 
-.modal-panel__value.is-positive {
-  color: var(--color-risk);
+.modal-panel__fact.is-positive .modal-panel__value {
+  color: #b45309;
+}
+
+.modal-panel__badge {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: var(--w-600);
+  border-radius: var(--radius-pill);
+  padding: 3px 11px;
+  background: rgba(217, 169, 40, 0.14);
+  color: var(--color-accent-strong);
+}
+
+.modal-panel__badge.is-positive {
+  background: rgba(180, 83, 9, 0.12);
+  color: #b45309;
 }
 
 .modal-panel__explanation {
   font-size: 14px;
-  color: var(--color-text);
+  color: var(--color-ink);
   margin-bottom: 18px;
 }
 
 .modal-panel__subtitle {
   font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-weight: var(--w-600);
+  margin-bottom: 12px;
+  color: var(--color-primary);
 }
 
 .modal-panel__list {
   list-style: none;
   margin: 0 0 16px;
   padding: 0;
-  border: 1px solid var(--color-border);
+  border: var(--color-hairline);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -224,52 +275,75 @@ function handleClose() {
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 14px;
+  padding: 11px 14px;
   font-size: 14px;
 }
 
 .modal-panel__row + .modal-panel__row {
-  border-top: 1px solid var(--color-border);
+  border-top: var(--color-hairline);
 }
 
 .modal-panel__row-label {
-  color: var(--color-text-soft);
+  color: var(--color-ink-mute);
 }
 
 .modal-panel__row-value {
-  font-weight: 600;
+  font-weight: var(--w-600);
+  color: var(--color-primary);
 }
 
 .modal-panel__empty {
   font-size: 14px;
-  color: var(--color-text-soft);
+  color: var(--color-ink-mute);
   margin-bottom: 16px;
 }
 
 .modal-panel__disclaimer {
   font-size: 12px;
-  color: var(--color-text-soft);
-  border-top: 1px solid var(--color-border);
+  color: var(--color-ink-mute);
+  border-top: var(--color-hairline);
   padding-top: 12px;
 }
 
 .modal-panel__foot {
-  padding: 12px 20px 16px;
-  border-top: 1px solid var(--color-border);
+  padding: 12px 22px 18px;
+  border-top: var(--color-hairline);
 }
 
 .modal-panel__close-btn {
   width: 100%;
   border: none;
-  background: var(--color-accent);
+  background: var(--color-primary);
   color: #fff;
-  border-radius: 10px;
-  padding: 11px;
+  border-radius: var(--radius-md);
+  padding: 12px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: var(--w-600);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--dur) var(--ease);
 }
 
 .modal-panel__close-btn:hover {
-  background: var(--color-accent-dark);
+  background: var(--color-primary-deep);
+}
+
+@keyframes fadeBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>

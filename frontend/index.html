@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -9,6 +9,18 @@
       content="F5 RiskAI - AI Stroke Risk Assessment prototype"
     />
     <title>F5 RiskAI - AI Stroke Risk Assessment</title>
+    <script>
+      // Apply persisted theme + language before CSS paint to avoid a flash.
+      ;(function () {
+        try {
+          var root = document.documentElement
+          var theme = localStorage.getItem('f5-riskai-theme') || 'light'
+          var lang = localStorage.getItem('f5-riskai-language') || 'es'
+          root.setAttribute('data-theme', theme === 'dark' ? 'dark' : 'light')
+          root.setAttribute('lang', lang === 'en' ? 'en' : 'es')
+        } catch (e) {}
+      })()
+    </script>
   </head>
   <body>
     <div id="app"></div>

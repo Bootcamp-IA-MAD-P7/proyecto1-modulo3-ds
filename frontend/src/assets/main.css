@@ -1,28 +1,142 @@
-/* F5 RiskAI - global design system
-   Modern, clean, technological AI-for-health aesthetic.
-   Palette: slate neutrals + a restrained sky/teal accent. */
+/* ============================================================
+   F5 RiskAI — global design system (premium medical AI)
+   Palette: navy + yellow accent. Light & dark themes.
+   Theme selected via <html data-theme="light|dark">.
+   ============================================================ */
 
 :root {
-  --color-bg: #f6f8fb;
-  --color-surface: #ffffff;
-  --color-border: #e3e8ef;
-  --color-text: #1e293b;
-  --color-text-soft: #64748b;
-  --color-accent: #0ea5e9;
-  --color-accent-dark: #0284c7;
-  --color-accent-soft: #e0f2fe;
-  --color-positive: #16a34a;
-  --color-positive-soft: #dcfce7;
-  --color-risk: #dc2626;
-  --color-risk-soft: #fee2e2;
-  --color-warning: #b45309;
-  --color-warning-soft: #fef3c7;
+  /* --- Semantic color tokens (switched by [data-theme]) --- */
+  --color-canvas: #f8fafc;          /* page background */
+  --color-canvas-soft: #eef2f7;     /* zebra/alt surface */
+  --color-canvas-tint: #f1f5f9;     /* subtle tint */
+  --color-card: #ffffff;            /* card surface */
+  --color-card-glass: rgba(255, 255, 255, 0.9);
+
+  --color-primary: #172033;         /* headings / strong text (navy) */
+  --color-primary-deep: #0b1424;    /* darker navy */
+
+  --color-ink: #172033;             /* body text */
+  --color-ink-mute: #7a8496;        /* secondary text */
+  --color-ink-faint: #9ba3b0;       /* faint text */
+  --color-ink-on-dark: #ffffff;
+  --color-ink-on-dark-mute: #b9c2d0;
+  --color-ink-on-dark-faint: #8b96a7;
+
+  /* Accent yellow */
+  --color-accent: #f4c95d;
+  --color-accent-strong: #d9a928;
+  --color-accent-deep: #b78c1f;
+  --color-on-accent: #172033;       /* text on yellow */
+
+  /* Surfaces */
+  --color-sidebar-bg: rgba(16, 31, 56, 0.88);
+  --color-sidebar-border: rgba(244, 201, 93, 0.12);
+
+  /* Active / hover yellow-derived */
+  --color-active-bg: rgba(244, 201, 93, 0.12);
+  --color-active-border: rgba(244, 201, 93, 0.2);
+  --color-hover-bg: rgba(244, 201, 93, 0.06);
+  --active-glow: 0 0 10px rgba(244, 201, 93, 0.55);
+
+  /* Status (restrained amber/teal, no bright red/green) */
+  --color-positive: #b78c1f;        /* warm amber */
+  --color-positive-soft: rgba(183, 140, 31, 0.12);
+  --color-risk: #b45309;            /* warm alert */
+  --color-risk-soft: rgba(180, 83, 9, 0.12);
+  --color-warning: #d9a928;
+
+  /* Hairlines / borders */
+  --color-hairline: #e2e8f0;
+  --color-hairline-dark: #3f3a52;
+  --hairline: 1px solid var(--color-hairline);
+
+  /* Radii */
   --radius-sm: 8px;
   --radius-md: 12px;
-  --radius-lg: 20px;
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
-  --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 999px;
+
+  /* Shadows (near imperceptible) */
+  --shadow-xs: 0 1px 2px rgba(23, 32, 51, 0.05);
+  --shadow-sm: 0 2px 8px rgba(23, 32, 51, 0.06);
+  --shadow-md: 0 6px 20px rgba(23, 32, 51, 0.08);
+  --shadow-lg: 0 18px 44px rgba(7, 20, 38, 0.18);
+
+  /* Glass / translucency */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(23, 32, 51, 0.08);
+  --glass-blur: blur(14px);
+
+  /* Typography */
+  --font: 'Inter', system-ui, -apple-system, 'BlinkMacSystemFont',
+    'Segoe UI', sans-serif;
+  --fs-display: 48px;
+  --fs-h1: 40px;
+  --fs-h2: 25px;
+  --fs-h3: 20px;
+  --fs-body: 15px;
+  --fs-caption: 13px;
+  --w-400: 400;
+  --w-500: 500;
+  --w-600: 600;
+  --w-700: 700;
+
+  /* Layout */
+  --sidebar-width: 256px;
+  --header-height: 62px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur: 0.2s;
+}
+
+/* ---- DARK THEME ---- */
+:root[data-theme='dark'] {
+  --color-canvas: #071426;
+  --color-canvas-soft: #0d1c33;
+  --color-canvas-tint: #0a1730;
+  --color-card: #101f38;
+  --color-card-glass: rgba(16, 31, 56, 0.82);
+
+  --color-primary: #ffffff;
+  --color-primary-deep: #eaf2ff;
+
+  --color-ink: #ffffff;
+  --color-ink-mute: #7a8496;
+  --color-ink-faint: #8b96a7;
+  --color-ink-on-dark: #ffffff;
+  --color-ink-on-dark-mute: #b9c2d0;
+  --color-ink-on-dark-faint: #8b96a7;
+
+  /* Accent stays yellow */
+  --color-accent: #f4c95d;
+  --color-accent-strong: #d9a928;
+  --color-accent-deep: #b78c1f;
+  --color-on-accent: #172033;
+
+  --color-sidebar-bg: rgba(16, 31, 56, 0.88);
+  --color-sidebar-border: rgba(244, 201, 93, 0.12);
+  --color-active-bg: rgba(244, 201, 93, 0.12);
+  --color-active-border: rgba(244, 201, 93, 0.2);
+  --color-hover-bg: rgba(244, 201, 93, 0.06);
+
+  --color-positive: #f4c95d;
+  --color-positive-soft: rgba(244, 201, 93, 0.14);
+  --color-risk: #e0a35c;
+  --color-risk-soft: rgba(224, 163, 92, 0.14);
+  --color-warning: #f4c95d;
+
+  --color-hairline: rgba(185, 194, 208, 0.16);
+  --color-hairline-dark: #3f3a52;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.5);
+
+  --glass-bg: rgba(16, 31, 56, 0.82);
+  --glass-border: rgba(244, 201, 93, 0.1);
 }
 
 * {
@@ -37,11 +151,13 @@ body {
 
 body {
   font-family: var(--font);
-  background: var(--color-bg);
-  color: var(--color-text);
-  line-height: 1.5;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  line-height: 1.55;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   min-height: 100vh;
+  transition: background 0.25s var(--ease), color 0.25s var(--ease);
 }
 
 #app {
@@ -55,17 +171,38 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  font-weight: var(--w-700);
+  letter-spacing: -0.025em;
+  color: var(--color-primary);
+}
+
+h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.15;
+}
+
+h2 {
+  font-size: var(--fs-h2);
+}
+
+h3 {
+  font-size: var(--fs-h3);
 }
 
 p {
   margin: 0;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 button {
   font-family: inherit;
   cursor: pointer;
+  border: none;
+  background: none;
 }
 
 button:disabled {
@@ -77,14 +214,7 @@ select {
   font-family: inherit;
 }
 
-/* Reusable layout helpers */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
+/* ---------- Layout helpers ---------- */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -95,4 +225,74 @@ select {
   clip: rect(0 0 0 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* ---------- Shared card primitive ---------- */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+}
+
+/* ---------- Card header block (icon chip + title + subtitle) ---------- */
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  margin-bottom: 18px;
+}
+
+.card-head__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: rgba(244, 201, 93, 0.14);
+  color: var(--color-accent-strong);
+  border: 1px solid rgba(217, 169, 40, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.card-head__icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.card-head__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.card-head__title {
+  font-size: 17px;
+  letter-spacing: -0.02em;
+  color: var(--color-primary);
+}
+
+.card-head__subtitle {
+  font-size: 13px;
+  color: var(--color-ink-mute);
+  margin-top: 2px;
+}
+
+/* ---------- Focus visibility (yellow accent) ---------- */
+:focus-visible {
+  outline: 2px solid var(--color-accent-strong);
+  outline-offset: 2px;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

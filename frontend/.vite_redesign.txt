@@ -1,0 +1,175 @@
+Re-optimizing dependencies because lockfile has changed
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m889[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+[2m  [32m➜[39m  [1mNetwork[22m[2m: use [22m[1m--host[22m[2m to expose[22m
+[2m12:16:35 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/main.css[22m
+[2m12:17:10 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue, /src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m12:17:22 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m12:17:26 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m12:18:06 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FactorsCard.vue, /src/components/FactorsCard.vue?vue&type=style&index=0&scoped=532bce3a&lang.css[22m
+[2m12:18:23 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue, /src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m12:18:43 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/NeuralVisualization.vue?vue&type=style&index=0&scoped=e3178ea2&lang.css, /src/components/NeuralVisualization.vue[22m
+[2m12:18:57 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue[22m
+[2m12:19:05 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue?vue&type=style&index=0&scoped=29daa58d&lang.css[22m
+[2m12:19:12 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue?vue&type=style&index=0&scoped=29daa58d&lang.css[22m
+[2m12:28:47 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/main.css[22m
+[2m12:29:24 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue, /src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m12:30:08 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Header.vue?vue&type=style&index=0&scoped=c970699f&lang.css, /src/components/Header.vue[22m
+[2m12:30:14 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/router/index.js[22m
+[2m12:31:02 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue, /src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m12:31:13 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue?vue&type=style&index=0&scoped=29daa58d&lang.css[22m
+[2m12:31:33 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue, /src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m12:31:52 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/NeuralVisualization.vue?vue&type=style&index=0&scoped=e3178ea2&lang.css, /src/components/NeuralVisualization.vue[22m
+[2m12:32:30 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m12:33:49 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/LoadingState.vue?vue&type=style&index=0&scoped=fb0fe922&lang.css[22m
+[2m12:33:53 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ErrorState.vue?vue&type=style&index=0&scoped=52f2b67a&lang.css[22m
+[2m12:33:56 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ErrorState.vue?vue&type=style&index=0&scoped=52f2b67a&lang.css[22m
+[2m12:34:15 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FactorsCard.vue?vue&type=style&index=0&scoped=532bce3a&lang.css[22m
+[2m12:34:24 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ModelPerformance.vue?vue&type=style&index=0&scoped=5f119a48&lang.css[22m
+[2m12:34:38 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SummaryCards.vue?vue&type=style&index=0&scoped=2d567a3a&lang.css[22m
+[2m12:35:05 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/views/Analysis.vue[22m
+[2m12:35:16 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/views/Patients.vue[22m
+[2m12:35:29 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/views/Reports.vue[22m
+[2m12:35:39 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/views/History.vue[22m
+[2m12:35:52 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/views/Settings.vue[22m
+[2m12:36:03 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/views/Help.vue[22m
+[2m12:36:38 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/views/Login.vue[22m
+[2m12:45:46 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m12:46:14 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m12:46:33 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m12:46:56 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue[22m
+[2m12:47:12 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m12:47:22 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/NeuralVisualization.vue?vue&type=style&index=0&scoped=e3178ea2&lang.css[22m
+[2m12:52:13 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m12:52:20 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue[22m
+[2m12:53:55 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m12:54:57 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:03:52 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:04:02 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:04:07 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:04:13 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:16:22 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue?vue&type=style&index=0&scoped=05649033&lang.css[22m
+[2m1:16:36 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue?vue&type=style&index=0&scoped=05649033&lang.css[22m
+[2m1:16:41 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue?vue&type=style&index=0&scoped=05649033&lang.css[22m
+[2m1:16:48 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m1:16:55 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:17:01 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:17:13 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:17:25 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m1:17:33 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Header.vue?vue&type=style&index=0&scoped=c970699f&lang.css[22m
+[2m1:17:42 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m1:17:48 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m1:18:07 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/NeuralVisualization.vue?vue&type=style&index=0&scoped=e3178ea2&lang.css[22m
+[2m1:18:17 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue[22m
+[2m1:18:42 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m1:18:57 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue?vue&type=style&index=0&scoped=29daa58d&lang.css[22m
+[2m1:19:01 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue?vue&type=style&index=0&scoped=29daa58d&lang.css[22m
+[2m1:19:27 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue?vue&type=style&index=0&scoped=29daa58d&lang.css[22m
+[2m1:19:36 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m1:19:43 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m1:19:51 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/LoadingState.vue?vue&type=style&index=0&scoped=fb0fe922&lang.css[22m
+[2m1:20:03 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue?vue&type=style&index=0&scoped=05649033&lang.css[22m
+[2m1:22:23 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m1:22:30 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue[22m
+[2m1:23:53 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m5:58:57 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/main.js[22m
+[2m5:59:02 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m5:59:14 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/assets/main.css[22m
+[2m5:59:18 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue?vue&type=style&index=0&scoped=05649033&lang.css[22m
+[2m5:59:25 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m5:59:29 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m5:59:32 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m5:59:37 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m5:59:40 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m5:59:51 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m6:00:09 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Header.vue, /src/components/Header.vue?vue&type=style&index=0&scoped=c970699f&lang.css[22m
+[2m6:00:14 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:20 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:24 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:29 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:34 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:38 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:42 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:47 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:00:52 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m6:00:57 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m6:01:03 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m6:01:07 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue?vue&type=style&index=0&scoped=7f773d42&lang.css[22m
+[2m6:01:13 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:01:17 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m6:01:21 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue[22m
+[2m6:01:26 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue[22m
+[2m6:01:30 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue[22m
+[2m6:02:17 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/NeuralVisualization.vue[22m
+[2m6:02:22 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/NeuralVisualization.vue[22m
+[2m6:02:33 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/NeuralVisualization.vue?vue&type=style&index=0&scoped=e3178ea2&lang.css[22m
+[2m6:02:40 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue[22m
+[2m6:02:48 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue[22m
+[2m6:02:54 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:02:58 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:03:03 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:03:07 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:03:12 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:03:18 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:03:23 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:03:27 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:03:34 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue[22m
+[2m6:04:05 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue[22m
+[2m6:04:09 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m6:04:12 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m6:04:15 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m6:04:19 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m6:04:25 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RiskAnalysisModal.vue?vue&type=style&index=0&scoped=a186be71&lang.css[22m
+[2m6:04:37 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/LoadingState.vue, /src/components/LoadingState.vue?vue&type=style&index=0&scoped=fb0fe922&lang.css[22m
+[2m6:04:42 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ErrorState.vue, /src/components/ErrorState.vue?vue&type=style&index=0&scoped=52f2b67a&lang.css[22m
+[2m6:05:02 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/LoadingState.vue[22m
+[2m6:05:05 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ErrorState.vue[22m
+[2m6:05:08 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue[22m
+[2m6:05:14 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue?vue&type=style&index=0&scoped=29daa58d&lang.css[22m
+[2m6:05:37 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Analysis.vue?vue&type=style&index=0&scoped=b9a026a1&lang.css[22m
+[2m6:05:37 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Analysis.vue?vue&type=style&index=0&scoped=b9a026a1&lang.css[22m
+[2m6:05:38 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/History.vue?vue&type=style&index=0&scoped=89ccdf85&lang.css[22m
+[2m6:05:38 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/History.vue?vue&type=style&index=0&scoped=89ccdf85&lang.css[22m
+[2m6:05:39 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/History.vue?vue&type=style&index=0&scoped=89ccdf85&lang.css[22m
+[2m6:05:39 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Help.vue?vue&type=style&index=0&scoped=3b8a03f8&lang.css[22m
+[2m6:05:40 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Help.vue?vue&type=style&index=0&scoped=3b8a03f8&lang.css[22m
+[2m6:05:40 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Help.vue?vue&type=style&index=0&scoped=3b8a03f8&lang.css[22m
+[2m6:05:41 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Settings.vue?vue&type=style&index=0&scoped=817427b0&lang.css[22m
+[2m6:05:41 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Settings.vue?vue&type=style&index=0&scoped=817427b0&lang.css[22m
+[2m6:05:41 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Reports.vue?vue&type=style&index=0&scoped=a4e77db9&lang.css[22m
+[2m6:05:42 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Reports.vue?vue&type=style&index=0&scoped=a4e77db9&lang.css[22m
+[2m6:05:42 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Reports.vue?vue&type=style&index=0&scoped=a4e77db9&lang.css[22m
+[2m6:05:43 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Reports.vue?vue&type=style&index=0&scoped=a4e77db9&lang.css[22m
+[2m6:05:44 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Patients.vue?vue&type=style&index=0&scoped=39ff24c9&lang.css[22m
+[2m6:05:45 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Patients.vue?vue&type=style&index=0&scoped=39ff24c9&lang.css[22m
+[2m6:06:23 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PredictionResult.vue?vue&type=style&index=0&scoped=5ba0f119&lang.css[22m
+[2m6:06:33 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FactorsCard.vue[22m
+[2m6:06:38 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FactorsCard.vue[22m
+[2m6:06:42 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FactorsCard.vue?vue&type=style&index=0&scoped=532bce3a&lang.css[22m
+[2m6:06:45 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FactorsCard.vue?vue&type=style&index=0&scoped=532bce3a&lang.css[22m
+[2m6:06:48 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/FactorsCard.vue?vue&type=style&index=0&scoped=532bce3a&lang.css[22m
+[2m6:06:59 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ModelPerformance.vue, /src/components/ModelPerformance.vue?vue&type=style&index=0&scoped=5f119a48&lang.css[22m
+[2m6:07:07 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SummaryCards.vue[22m
+[2m6:07:11 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SummaryCards.vue?vue&type=style&index=0&scoped=2d567a3a&lang.css[22m
+[2m6:07:37 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/store.js[22m
+[2m6:07:59 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Header.vue?vue&type=style&index=0&scoped=c970699f&lang.css[22m
+[2m6:09:31 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/Dashboard.vue[22m
+[2m7:00:02 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:00:08 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:00:15 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:00:21 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:07:35 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:07:39 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:07:44 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:07:49 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:07:55 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:07:59 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:13:59 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue?vue&type=style&index=0&scoped=53430c37&lang.css[22m
+[2m7:18:06 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppSidebar.vue[22m
+[2m7:18:12 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/views/AppLayout.vue[22m
+[2m7:21:40 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/i18n/translations.js[22m
+[2m7:21:53 p. m.[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/i18n/translations.js[22m
+[2m7:21:59 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue[22m
+[2m7:22:03 p. m.[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/PatientAssessmentForm.vue[22m
