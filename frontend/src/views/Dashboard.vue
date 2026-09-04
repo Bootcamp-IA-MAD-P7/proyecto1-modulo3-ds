@@ -1,15 +1,14 @@
 <script setup>
 /**
  * F5 RiskAI dashboard (content view, rendered inside AppLayout).
- * Layout (reorganized for more air / hierarchy):
- *   - Top row:   Patient Assessment (60%) | Neural Visualization + Resumen (40%)
+ * Layout:
+ *   - Patient Assessment (full width) — the 3D brain lives in the Análisis view.
  *   - Below:     Risk Result (full width)
  *   - Below:     Risk Analysis (factors) | Model Metrics (breathing row)
  * Prediction flow form -> service -> result/analysis is unchanged.
  */
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import PatientAssessmentForm from '@/components/PatientAssessmentForm.vue'
-import NeuralVisualization from '@/components/NeuralVisualization.vue'
 import PredictionResult from '@/components/PredictionResult.vue'
 import RiskAnalysisModal from '@/components/RiskAnalysisModal.vue'
 import LoadingState from '@/components/LoadingState.vue'
@@ -25,39 +24,6 @@ const loading = ref(false)
 const errorMessage = ref('')
 const modalOpen = ref(false)
 const lastPayload = ref(null)
-
-const resultLabel = computed(() =>
-  result.value ? (result.value.prediction === 1 ? t('posLabel') : t('negLabel')) : '',
-)
-
-// "Resumen del análisis" block — real data only. Before a prediction it shows an
-// idle/empty state; after a prediction it uses exclusively the real API response.
-const summaryItems = computed(() => {
-  const entrada = lastPayload.value
-    ? `${Object.keys(lastPayload.value).length} ${t('summaryEntradaOf')}`
-    : t('summaryEntradaIdle')
-
-  const estado = loading.value
-    ? t('summaryEstadoLoading')
-    : result.value
-      ? t('summaryEstadoDone')
-      : errorMessage.value
-        ? t('summaryEstadoError')
-        : t('summaryEstado')
-
-  const resultado = loading.value
-    ? t('summaryResultadoLoading')
-    : result.value
-      ? `${resultLabel.value} · ${(result.value.probability * 100).toFixed(2)}%`
-      : t('summaryResultadoIdle')
-
-  return [
-    { label: t('statusLabel'), value: estado },
-    { label: t('modelLabel'), value: 'Logistic Regression' },
-    { label: t('inputLabel'), value: entrada },
-    { label: t('resultLabel'), value: resultado },
-  ]
-})
 
 async function handleSubmit(payload) {
   if (loading.value) return
@@ -121,7 +87,7 @@ function closeAnalysis() {
       </p>
     </div>
 
-    <!-- SECTION 1 (top): Patient Assessment (60%) | Neural + Resumen (40%) -->
+    <!-- SECTION 1 (top): Patient Assessment (full width) -->
     <div class="dashboard__top">
       <section class="panel panel--assess" aria-label="Patient assessment">
         <div class="card-head">
@@ -146,38 +112,6 @@ function closeAnalysis() {
           </div>
         </div>
         <PatientAssessmentForm @submit="handleSubmit" />
-      </section>
-
-      <section class="panel panel--side" aria-label="Neural visualization and summary">
-        <div class="card-head">
-          <span class="card-head__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <circle cx="5" cy="19" r="1.6" fill="currentColor" />
-              <circle cx="12" cy="6" r="1.6" fill="currentColor" />
-              <circle cx="19" cy="19" r="1.6" fill="currentColor" />
-              <circle cx="9" cy="16" r="1.6" fill="currentColor" />
-              <circle cx="16" cy="13" r="1.6" fill="currentColor" />
-              <path d="M6 18.5 11 7m8 12-3-6M5 19l4-3m11 3-5-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-          </span>
-          <div class="card-head__text">
-            <span class="panel__kicker">{{ t('neuralEyebrow') }}</span>
-            <h2 class="card-head__title">{{ t('neuralTitle') }}</h2>
-            <p class="card-head__subtitle">{{ t('neuralSubtitle') }}</p>
-          </div>
-        </div>
-
-        <NeuralVisualization />
-
-        <div class="dashboard__summary" aria-label="Resumen del análisis">
-          <h3 class="dashboard__summary-title">{{ t('summaryTitle') }}</h3>
-          <dl class="dashboard__summary-list">
-            <template v-for="item in summaryItems" :key="item.label">
-              <dt class="dashboard__summary-key">{{ item.label }}</dt>
-              <dd class="dashboard__summary-value">{{ item.value }}</dd>
-            </template>
-          </dl>
-        </div>
       </section>
     </div>
 
@@ -291,10 +225,10 @@ function closeAnalysis() {
   color: var(--color-ink-faint);
 }
 
-/* SECTION 1: Patient Assessment (60%) | Neural + Summary (40%) */
+/* SECTION 1: Patient Assessment (full width) */
 .dashboard__top {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 1fr;
   gap: 28px;
   align-items: start;
 }
@@ -328,10 +262,6 @@ function closeAnalysis() {
 
 .panel--assess .card-head {
   margin-bottom: 18px;
-}
-
-.panel--side .card-head {
-  margin-bottom: 16px;
 }
 
 .panel--result {
@@ -376,72 +306,15 @@ function closeAnalysis() {
   max-width: 300px;
 }
 
-/* "Resumen del análisis" block (right column, under the placeholder) */
-.dashboard__summary {
-  margin-top: 18px;
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-lg);
-  background: var(--color-card);
-  padding: 16px 18px;
-}
-
-.dashboard__summary-title {
-  font-size: 12px;
-  font-weight: var(--w-700);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-accent-strong);
-  margin-bottom: 12px;
-}
-
-.dashboard__summary-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 18px;
-  margin: 0;
-}
-
-.dashboard__summary-key {
-  grid-column: 1;
-  font-size: 12px;
-  color: var(--color-ink-faint);
-  margin: 0;
-}
-
-.dashboard__summary-value {
-  grid-column: 2;
-  font-size: 13px;
-  font-weight: var(--w-600);
-  color: var(--color-primary);
-  margin: 0;
-  overflow-wrap: anywhere;
-}
-
 .factors-slot {
   min-height: 200px;
 }
 
-@media (max-width: 1180px) {
-  .dashboard__top {
-    grid-template-columns: 58% 42%;
-  }
-}
-
-/* Tablet: stack the top row into a single column; result stays full width. */
+/* Tablet: stack sections into a single column; result stays full width. */
 @media (max-width: 980px) {
-  .dashboard__top {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
   .dashboard__info {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 640px) {
-  .dashboard__summary-list {
-    grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 20px;
   }
 }
 </style>

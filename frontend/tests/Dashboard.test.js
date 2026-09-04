@@ -47,19 +47,22 @@ describe('Dashboard', () => {
     document.body.innerHTML = ''
   })
 
-  it('mounts and renders the dashboard intro + patient assessment + neural visualization', () => {
+  it('mounts and renders the dashboard intro + patient assessment (no neural visualization)', () => {
     wrapper = mount(Dashboard)
     expect(wrapper.text()).toContain('F5 RISKAI')
     expect(wrapper.text()).toContain('Evaluación de riesgo de ictus')
     expect(wrapper.text()).toContain('Patient Assessment')
-    expect(wrapper.text()).toContain('Neural Visualization')
-    expect(wrapper.findComponent(NeuralVisualization).exists()).toBe(true)
+    // The 3D brain lives in the Análisis view; the placeholder is gone from Inicio.
+    expect(wrapper.findComponent(NeuralVisualization).exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('Neural Visualization')
   })
 
-  it('renders the neural placeholder text (no real 3D model)', () => {
+  it('does not render any neural placeholder text on the Inicio view', () => {
     wrapper = mount(Dashboard)
-    const neural = wrapper.findComponent(NeuralVisualization)
-    expect(neural.text()).toContain('coming soon')
+    expect(wrapper.text()).not.toContain('coming soon')
+    expect(wrapper.text()).not.toContain('Brain3D')
+    expect(wrapper.text()).not.toContain('Integración futura')
+    expect(wrapper.text()).not.toContain('Compatible con Vue')
   })
 
   it('shows the loading state during the prediction request', async () => {
