@@ -2,7 +2,8 @@
 /**
  * Bottom summary row cards inspired by the reference.
  * Only real, available information is shown. Statistics that don't exist yet
- * display "Próximamente" / "No disponible" — never invented numbers.
+ * display an honest state ("Sin base de datos" / "Sin datos históricos") —
+ * never invented numbers.
  */
 import { computed } from 'vue'
 import { t } from '@/store.js'
@@ -11,7 +12,7 @@ const cards = computed(() => [
   {
     key: 'pacientes',
     label: t('cardsPacientes'),
-    value: t('proximamente'),
+    value: t('sinBaseDatos'),
     hint: t('cardsPacientesHint'),
     icon: 'users',
     tone: 'accent',
@@ -19,7 +20,7 @@ const cards = computed(() => [
   {
     key: 'riesgo',
     label: t('cardsRiesgo'),
-    value: t('proximamente'),
+    value: t('sinDatosHistoricos'),
     hint: t('cardsRiesgoHint'),
     icon: 'gauge',
     tone: 'accent',

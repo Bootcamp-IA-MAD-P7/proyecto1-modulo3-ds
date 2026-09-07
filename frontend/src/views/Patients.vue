@@ -1,53 +1,56 @@
 <script setup>
 /**
- * Patients view (mock). Demo table only, no real data. Clearly labeled.
+ * Patients view. The registry is intentionally empty: the project has no
+ * database yet, so patients are never invented. The table structure stays
+ * ready to receive real records in a future phase.
  */
-const patients = [
-  { id: 1, nombre: 'Ana Martínez', edad: 58, riesgo: 'Negativo', prob: '1.9%', fecha: '2026-09-01', estado: 'Completo' },
-  { id: 2, nombre: 'Luis Fernández', edad: 71, riesgo: 'Positivo', prob: '12.4%', fecha: '2026-08-28', estado: 'Completo' },
-  { id: 3, nombre: 'Carmen Ruiz', edad: 45, riesgo: 'Negativo', prob: '0.8%', fecha: '2026-08-25', estado: 'En revisión' },
-  { id: 4, nombre: 'Pedro Sánchez', edad: 64, riesgo: 'Positivo', prob: '9.7%', fecha: '2026-08-22', estado: 'Completo' },
-]
+import { t } from '@/store.js'
 </script>
 
 <template>
   <div class="view">
     <div class="view__intro">
-      <span class="view__kicker">Patient Registry</span>
-      <h1 class="view__title">Pacientes</h1>
-      <p class="view__subtitle">Registro de casos evaluados. Vista de demostración.</p>
+      <span class="view__kicker">{{ t('patientsEyebrow') }}</span>
+      <h1 class="view__title">{{ t('patientsTitle') }}</h1>
+      <p class="view__subtitle">{{ t('patientsSubtitle') }}</p>
     </div>
 
     <div class="table-wrap">
       <table class="table">
         <thead>
           <tr>
-            <th>Paciente</th>
-            <th>Edad</th>
-            <th>Riesgo</th>
-            <th>Probabilidad</th>
-            <th>Fecha</th>
-            <th>Estado</th>
+            <th>{{ t('patientsTablePaciente') }}</th>
+            <th>{{ t('patientsTableEdad') }}</th>
+            <th>{{ t('patientsTableRiesgo') }}</th>
+            <th>{{ t('patientsTableProbabilidad') }}</th>
+            <th>{{ t('patientsTableFecha') }}</th>
+            <th>{{ t('patientsTableEstado') }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="p in patients" :key="p.id">
-            <td class="table__name">{{ p.nombre }}</td>
-            <td>{{ p.edad }}</td>
-            <td>
-              <span class="badge" :class="p.riesgo === 'Positivo' ? 'badge--positive' : 'badge--negative'">
-                {{ p.riesgo }}
-              </span>
+          <tr>
+            <td colspan="6">
+              <div class="empty">
+                <svg class="empty__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6" />
+                  <path
+                    d="M2.8 19c.6-3 3.2-4.4 6.2-4.4s5.6 1.4 6.2 4.4"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                <span class="empty__title">{{ t('patientsEmptyTitle') }}</span>
+                <span class="empty__hint">{{ t('patientsEmptyHint') }}</span>
+              </div>
             </td>
-            <td>{{ p.prob }}</td>
-            <td>{{ p.fecha }}</td>
-            <td>{{ p.estado }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <p class="view__notice">Datos de ejemplo con fines de demostración — no son pacientes reales.</p>
+    <p class="view__notice">{{ t('patientsNotice') }}</p>
   </div>
 </template>
 
@@ -103,32 +106,37 @@ const patients = [
 }
 
 .table td {
-  padding: 13px 18px;
-  color: var(--color-ink);
+  padding: 0;
   border-top: var(--color-hairline);
 }
 
-.table__name {
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 56px 24px;
+  text-align: center;
+}
+
+.empty__icon {
+  width: 36px;
+  height: 36px;
+  color: var(--color-accent-strong);
+  opacity: 0.7;
+}
+
+.empty__title {
+  font-size: 15px;
   font-weight: var(--w-600);
   color: var(--color-primary);
 }
 
-.badge {
-  display: inline-block;
-  font-size: 11.5px;
-  font-weight: var(--w-600);
-  border-radius: var(--radius-pill);
-  padding: 3px 12px;
-}
-
-.badge--negative {
-  background: var(--color-positive-soft);
-  color: var(--color-positive);
-}
-
-.badge--positive {
-  background: var(--color-risk-soft);
-  color: var(--color-risk);
+.empty__hint {
+  font-size: 13px;
+  color: var(--color-ink-mute);
+  max-width: 320px;
 }
 
 .view__notice {

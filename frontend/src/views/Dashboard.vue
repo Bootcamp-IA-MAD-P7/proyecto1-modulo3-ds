@@ -2,12 +2,16 @@
 /**
  * F5 RiskAI dashboard (content view, rendered inside AppLayout).
  * Layout:
- *   - Patient Assessment (full width) — the 3D brain lives in the Análisis view.
+ *   - Top row (50/50): Patient Assessment (left) | Análisis — Brain3D + risk
+ *     summary (right). The panel title is simply "Análisis"; the brain reacts
+ *     to the REAL model probability as a presentation-only risk level
+ *     (LOW/MEDIUM/ELEVATED, see src/riskLevels.js) with green/gold/red glow.
  *   - Below:     Risk Result (full width)
  *   - Below:     Risk Analysis (factors) | Model Metrics (breathing row)
- * Prediction flow form -> service -> result/analysis is unchanged.
+ * Prediction flow form -> service -> result is unchanged; the Brain3D state
+ * and the summary BOTH derive from probability -> riskLevel() (single source).
  */
-import { ref } from 'vue'
+import { ref, computed, watch, onBeforeUnmount } from 'vue'
 import PatientAssessmentForm from '@/components/PatientAssessmentForm.vue'
 import PredictionResult from '@/components/PredictionResult.vue'
 import RiskAnalysisModal from '@/components/RiskAnalysisModal.vue'
@@ -16,7 +20,10 @@ import ErrorState from '@/components/ErrorState.vue'
 import FactorsCard from '@/components/FactorsCard.vue'
 import ModelPerformance from '@/components/ModelPerformance.vue'
 import SummaryCards from '@/components/SummaryCards.vue'
+import Brain3D from '@/components/Brain3D.vue'
+import AnalysisStatus from '@/components/AnalysisStatus.vue'
 import { predictStroke } from '@/services/predictionService.js'
+import { riskLevelFromProbability } from '@/riskLevels.js'
 import { t, state, optionLabel } from '@/store.js'
 
 const result = ref(null)
@@ -24,6 +31,86 @@ const loading = ref(false)
 const errorMessage = ref('')
 const modalOpen = ref(false)
 const lastPayload = ref(null)
+
+/**
+ * Visual risk level for the Brain3D + summary, derived ONLY from the real
+ * probability returned by POST /predict. Unusable values (missing/out of
+ * range) fall back to the neutral 'idle' state — no invented level.
+ */
+const riskLevel = computed(() => {
+  if (!result.value) return null
+  return riskLevelFromProbability(Number(result.value.probability))
+})
+
+const brainState = computed(() => {
+  if (loading.value) return 'analyzing'
+  if (errorMessage.value) return 'idle'
+  return riskLevel.value || 'idle'
+})
+
+/** Probability expressed as a 0..100 percentage for display + percent prop.
+ *  Only meaningful when a valid risk level exists (in-range number); otherwise
+ *  0 — never an invented/derived value. */
+const probabilityPercent = computed(() => {
+  if (!riskLevel.value) return 0
+  const p = Number(result.value.probability)
+  if (!Number.isFinite(p)) return 0
+  return Math.max(0, Math.min(100, Math.round(p * 100)))
+})
+
+/**
+ * The API probability is displayable only when it is a finite 0..1 number
+ * (the backend contract always satisfies this). With a malformed payload the
+ * result panel stays empty instead of showing invented/NaN numbers.
+ */
+const hasUsableProbability = computed(() => {
+  if (!result.value) return false
+  const p = Number(result.value.probability)
+  return Number.isFinite(p) && p >= 0 && p <= 1
+})
+
+const RISK_TONE = { low: 'success', medium: 'info', high: 'error' }
+
+const mlStatusTone = computed(() => {
+  if (loading.value) return 'active'
+  if (errorMessage.value) return 'error'
+  return riskLevel.value ? RISK_TONE[riskLevel.value] : 'neutral'
+})
+
+const mlStatusLabel = computed(() => {
+  if (loading.value) return t('summaryEstadoLoading')
+  if (errorMessage.value) return t('summaryEstadoError')
+  if (riskLevel.value) {
+    const key = `risk.level${riskLevel.value[0].toUpperCase()}${riskLevel.value.slice(1)}`
+    return t(key)
+  }
+  return t('summaryEstado')
+})
+
+let progressTimer = null
+const percent = ref(0)
+
+watch(brainState, (s) => {
+  if (progressTimer) clearInterval(progressTimer)
+  progressTimer = null
+  if (s === 'analyzing') {
+    percent.value = 0
+    progressTimer = setInterval(() => {
+      percent.value = Math.min(100, percent.value + Math.round(Math.random() * 9))
+      if (percent.value >= 100) {
+        clearInterval(progressTimer)
+        progressTimer = null
+      }
+    }, 180)
+  } else if (s !== 'idle') {
+    // Risk states show the REAL probability as the percentage.
+    percent.value = probabilityPercent.value
+  }
+})
+
+onBeforeUnmount(() => {
+  if (progressTimer) clearInterval(progressTimer)
+})
 
 async function handleSubmit(payload) {
   if (loading.value) return
@@ -87,7 +174,7 @@ function closeAnalysis() {
       </p>
     </div>
 
-    <!-- SECTION 1 (top): Patient Assessment (full width) -->
+    <!-- SECTION 1 (top, 50/50): Patient Assessment | Brain3D + Analysis Summary -->
     <div class="dashboard__top">
       <section class="panel panel--assess" aria-label="Patient assessment">
         <div class="card-head">
@@ -112,6 +199,39 @@ function closeAnalysis() {
           </div>
         </div>
         <PatientAssessmentForm @submit="handleSubmit" />
+      </section>
+
+      <section class="panel panel--brain" aria-label="Análisis 3D">
+        <div class="card-head">
+          <span class="card-head__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="5" cy="19" r="1.6" fill="currentColor" />
+              <circle cx="12" cy="6" r="1.6" fill="currentColor" />
+              <circle cx="19" cy="19" r="1.6" fill="currentColor" />
+              <path d="M6 18.5 11 7m8 12-3-6M5 19l4-3m11 3-5-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </span>
+          <div class="card-head__text">
+            <h2 class="card-head__title">{{ t('brainPanelTitle') }}</h2>
+          </div>
+        </div>
+
+        <Brain3D :state="brainState" :percent="percent" />
+
+        <div class="dashboard__summary">
+          <h3 class="dashboard__summary-title">{{ t('summaryTitle') }}</h3>
+          <AnalysisStatus :tone="mlStatusTone" :label="mlStatusLabel" />
+          <dl class="dashboard__summary-list">
+            <dt class="dashboard__summary-key">{{ t('risk.probabilityLabel') }}</dt>
+            <dd class="dashboard__summary-value">{{ probabilityPercent }}%</dd>
+            <dt class="dashboard__summary-key">{{ t('modelLabel') }}</dt>
+            <dd class="dashboard__summary-value">Logistic Regression</dd>
+            <dt class="dashboard__summary-key">{{ t('inputLabel') }}</dt>
+            <dd class="dashboard__summary-value">
+              {{ lastPayload ? `${Object.keys(lastPayload).length} ${t('summaryEntradaOf')}` : t('summaryEntradaIdle') }}
+            </dd>
+          </dl>
+        </div>
       </section>
     </div>
 
@@ -141,7 +261,7 @@ function closeAnalysis() {
         <LoadingState v-if="loading" />
         <ErrorState v-else-if="errorMessage" :message="errorMessage" @retry="retry" />
         <PredictionResult
-          v-else-if="result"
+          v-else-if="result && hasUsableProbability"
           :prediction="result.prediction"
           :probability="result.probability"
           @open-analysis="openAnalysis"
@@ -225,10 +345,10 @@ function closeAnalysis() {
   color: var(--color-ink-faint);
 }
 
-/* SECTION 1: Patient Assessment (full width) */
+/* SECTION 1 (top): Patient Assessment | Brain3D — 50/50 */
 .dashboard__top {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 28px;
   align-items: start;
 }
@@ -262,6 +382,52 @@ function closeAnalysis() {
 
 .panel--assess .card-head {
   margin-bottom: 18px;
+}
+
+.panel--brain .card-head {
+  margin-bottom: 16px;
+}
+
+.dashboard__summary {
+  margin-top: 18px;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dashboard__summary-title {
+  font-size: 12px;
+  font-weight: var(--w-700);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent-strong);
+}
+
+.dashboard__summary-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 18px;
+  margin: 0;
+}
+
+.dashboard__summary-key {
+  grid-column: 1;
+  font-size: 12px;
+  color: var(--color-ink-faint);
+  margin: 0;
+}
+
+.dashboard__summary-value {
+  grid-column: 2;
+  font-size: 13px;
+  font-weight: var(--w-600);
+  color: var(--color-primary);
+  margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .panel--result {
@@ -310,8 +476,9 @@ function closeAnalysis() {
   min-height: 200px;
 }
 
-/* Tablet: stack sections into a single column; result stays full width. */
+/* Tablet: stack sections into a single column (form -> brain -> result). */
 @media (max-width: 980px) {
+  .dashboard__top,
   .dashboard__info {
     grid-template-columns: 1fr;
     gap: 20px;

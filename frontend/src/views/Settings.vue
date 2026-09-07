@@ -5,7 +5,6 @@
  */
 import { ref } from 'vue'
 
-const notifications = ref(true)
 const temaOscuro = ref(false)
 
 const sections = [
@@ -35,23 +34,6 @@ const sections = [
 
       <section class="panel">
         <h2 class="panel__title">Preferencias</h2>
-        <div class="switch-row">
-          <div class="switch-row__text">
-            <span class="switch-row__label">Notificaciones</span>
-            <span class="switch-row__hint">Avisos sobre predicciones y estado del servicio</span>
-          </div>
-          <button
-            class="switch"
-            :class="{ 'switch--on': notifications }"
-            type="button"
-            role="switch"
-            :aria-checked="notifications"
-            @click="notifications = !notifications"
-          >
-            <span class="switch__thumb"></span>
-          </button>
-        </div>
-
         <div class="switch-row">
           <div class="switch-row__text">
             <span class="switch-row__label">Tema oscuro</span>
