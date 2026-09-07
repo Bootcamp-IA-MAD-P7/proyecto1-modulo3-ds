@@ -1,7 +1,7 @@
 """FastAPI prediction service for F5 RiskAI (Issue #026).
 
-Exposes an HTTP backend that loads the baseline Pipeline artifact
-(preprocessing + LogisticRegression) trained in Issue #017 once and serves:
+Exposes an HTTP backend that loads the final optimised Pipeline artifact
+(LogisticRegression + RandomOverSampler, C=0.5) once and serves:
 
 * ``GET  /health``  -- liveness check.
 * ``POST /predict`` -- accepts patient data, validates it, returns the
@@ -41,9 +41,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import predict_cli  # noqa: E402  (pure prediction logic from Issue #022)
 
 # Resolve the artifact path relative to the repository root regardless of the
-# directory from which uvicorn is launched.
+# directory from which uvicorn is launched. The API uses the FINAL tuned model
+# (LogisticRegression + RandomOverSampler, C=0.5), NOT the training baseline.
 _REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-MODEL_PATH = os.path.join(_REPO_ROOT, "artifacts", "logistic_regression_baseline.joblib")
+MODEL_PATH = os.path.join(_REPO_ROOT, "artifacts", "logistic_regression_tuned.joblib")
 
 
 def _load_model_once():
