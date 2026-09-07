@@ -12,7 +12,8 @@ from fastapi.testclient import TestClient  # noqa: E402
 
 import backend.main as api  # noqa: E402
 
-MODEL_ARTIFACT = os.path.join("artifacts", "logistic_regression_baseline.joblib")
+MODEL_ARTIFACT = os.path.join("artifacts", "logistic_regression_tuned.joblib")
+BASELINE_ARTIFACT = os.path.join("artifacts", "logistic_regression_baseline.joblib")
 
 VALID = {
     "gender": "Female",
@@ -105,20 +106,44 @@ class PredictionTests(unittest.TestCase):
 
 
 class ModelTests(unittest.TestCase):
-    def test_artifact_exists(self):
+    def test_tuned_artifact_exists(self):
         self.assertTrue(os.path.exists(MODEL_ARTIFACT))
 
     def test_pipeline_has_preprocess_and_model(self):
         self.assertIn("preprocess", api._MODEL.named_steps)
         self.assertIn("model", api._MODEL.named_steps)
 
-    def test_api_uses_persisted_artifact(self):
-        import joblib
+    def test_pipeline_has_sampler_step(self):
+        # Final tuned model = preprocess -> RandomOverSampler -> LogisticRegression.
+        self.assertIn("sampler", api._MODEL.named_steps)
+        from imblearn.over_sampling import RandomOverSampler
+        self.assertIsInstance(api._MODEL.named_steps["sampler"], RandomOverSampler)
 
-        pipeline = joblib.load(MODEL_ARTIFACT)
-        self.assertTrue(hasattr(pipeline, "predict"))
-        # Both objects describe the same trained baseline; API loads that artifact.
+    def test_final_model_is_tuned_logistic_regression(self):
+        from sklearn.linear_model import LogisticRegression
+        model = api._MODEL.named_steps["model"]
+        self.assertIsInstance(model, LogisticRegression)
+        self.assertEqual(model.C, 0.5)
+        self.assertEqual(model.solver, "lbfgs")
+        self.assertEqual(model.max_iter, 500)
+        self.assertEqual(model.random_state, 42)
+
+    def test_api_uses_tuned_artifact_not_baseline(self):
+        import joblib
+        tuned = joblib.load(MODEL_ARTIFACT)
+        baseline = joblib.load(BASELINE_ARTIFACT)
+        # The API must use the TUNED final model, never the training baseline:
+        # the tuned pipeline has a `sampler` step and C=0.5; the baseline does not.
+        self.assertIn("sampler", tuned.named_steps)
+        self.assertNotIn("sampler", baseline.named_steps)
+        self.assertIn("sampler", api._MODEL.named_steps)
+        self.assertEqual(api._MODEL.named_steps["model"].C, 0.5)
+        self.assertEqual(baseline.named_steps["model"].C, 1.0)
+
+    def test_api_uses_persisted_artifact(self):
         self.assertTrue(hasattr(api._MODEL, "predict"))
+        # Both objects describe the same trained final model; API loads that artifact.
+        self.assertTrue(hasattr(api._MODEL, "predict_proba"))
 
     def test_no_model_created_during_request(self):
         tracked = {id(obj) for obj in (api._MODEL,) if obj is not None}
