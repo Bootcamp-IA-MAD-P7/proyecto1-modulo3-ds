@@ -1,35 +1,40 @@
 <script setup>
 /**
- * History view (mock). Timeline of demo activity. No real data.
+ * History view. No evaluations are stored yet (the project has no database),
+ * so the view shows an honest, professional empty state instead of invented
+ * records. The layout is ready to receive real entries in a future phase.
  */
-const history = [
-  { fecha: '2026-09-01', evento: 'Evaluación de riesgo completada', detalle: 'Paciente Ana Martínez · prob. 1.9%' },
-  { fecha: '2026-08-28', evento: 'Evaluación de riesgo completada', detalle: 'Paciente Luis Fernández · prob. 12.4%' },
-  { fecha: '2026-08-25', evento: 'Evaluación del modelo actualizada', detalle: 'Baseline Logistic Regression' },
-  { fecha: '2026-08-22', evento: 'Evaluación de riesgo completada', detalle: 'Paciente Pedro Sánchez · prob. 9.7%' },
-]
+import { t } from '@/store.js'
 </script>
 
 <template>
   <div class="view">
     <div class="view__intro">
-      <span class="view__kicker">Activity Log</span>
-      <h1 class="view__title">Historial</h1>
-      <p class="view__subtitle">Actividad reciente del sistema. Vista de demostración.</p>
+      <span class="view__kicker">{{ t('historyEyebrow') }}</span>
+      <h1 class="view__title">{{ t('historyTitle') }}</h1>
+      <p class="view__subtitle">{{ t('historySubtitle') }}</p>
     </div>
 
-    <ol class="timeline">
-      <li v-for="(h, i) in history" :key="i" class="timeline__item">
-        <div class="timeline__dot" aria-hidden="true"></div>
-        <div class="timeline__card">
-          <span class="timeline__date">{{ h.fecha }}</span>
-          <span class="timeline__evento">{{ h.evento }}</span>
-          <span class="timeline__detalle">{{ h.detalle }}</span>
-        </div>
-      </li>
-    </ol>
-
-    <p class="view__notice">Registros de ejemplo con fines de demostración.</p>
+    <div class="empty">
+      <svg class="empty__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M4 4h16a2 2 0 0 1 0 4v12H4z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+        />
+      </svg>
+      <span class="empty__title">{{ t('historyEmptyTitle') }}</span>
+      <span class="empty__hint">{{ t('historyEmptyHint') }}</span>
+    </div>
   </div>
 </template>
 
@@ -57,78 +62,37 @@ const history = [
   color: var(--color-ink-mute);
 }
 
-.timeline {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.empty {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 260px;
   max-width: 720px;
+  text-align: center;
+  background: var(--color-card-glass);
+  border: 1px dashed var(--color-hairline-dark);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
 }
 
-.timeline__item {
-  position: relative;
-  display: flex;
-  gap: 16px;
+.empty__icon {
+  width: 36px;
+  height: 36px;
+  color: var(--color-accent-strong);
+  opacity: 0.7;
 }
 
-.timeline__dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--color-accent-strong);
-  box-shadow: 0 0 0 4px var(--color-active-bg);
-  margin-top: 6px;
-  flex-shrink: 0;
-}
-
-.timeline__item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 5.5px;
-  top: 24px;
-  bottom: -14px;
-  width: 1.5px;
-  background: var(--color-hairline);
-}
-
-.timeline__card {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: var(--color-hairline);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  padding: 14px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  flex: 1;
-}
-
-.timeline__date {
-  font-size: 11px;
-  font-weight: var(--w-700);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-ink-faint);
-}
-
-.timeline__evento {
-  font-size: 14px;
+.empty__title {
+  font-size: 15px;
   font-weight: var(--w-600);
   color: var(--color-primary);
 }
 
-.timeline__detalle {
+.empty__hint {
   font-size: 13px;
   color: var(--color-ink-mute);
-}
-
-.view__notice {
-  margin-top: 22px;
-  font-size: 12.5px;
-  color: var(--color-ink-faint);
+  max-width: 320px;
 }
 </style>

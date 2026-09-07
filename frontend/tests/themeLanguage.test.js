@@ -119,6 +119,16 @@ describe('Header theme + language controls', () => {
     expect(state.theme).toBe('dark')
     expect(localStorage.getItem(THEME_KEY)).toBe('dark')
   })
+
+  it('has no notification bell anymore (removed from the app scope)', () => {
+    const wrapper = mount(Header)
+    // The only remaining icon button is the theme toggle; no bell/dot.
+    const bell = wrapper
+      .findAll('.app-header__icon-btn')
+      .some((b) => (b.attributes('aria-label') || '').toLowerCase().includes('notification'))
+    expect(bell).toBe(false)
+    expect(wrapper.find('.app-header__dot').exists()).toBe(false)
+  })
 })
 
 describe('AppSidebar active menu state', () => {

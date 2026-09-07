@@ -29,11 +29,18 @@
  *     so the render loop is paused off-screen (low CPU/GPU).
  *   - Full resource cleanup on unmount (no memory leaks).
  *
- * The component keeps its existing prop API so Analysis.vue and the existing
- * tests continue to work unchanged:
- *   state  : 'idle' | 'analyzing' | 'result' | 'zone'
- *   label  : optional override for the headline
- *   percent: 0..100 progress (only meaningful in 'analyzing')
+ * Prop API (consumed by Dashboard.vue and the tests):
+ *   state  : 'idle' | 'analyzing' | 'low' | 'medium' | 'high'
+ *            - idle / analyzing: neutral state / the existing scan animation
+ *              (no definitive risk level is shown while the request runs)
+ *            - low / medium / high: VISUAL risk levels derived from the REAL
+ *              probability returned by POST /predict (see src/riskLevels.js).
+ *              The brain glows green / gold / red with abstract pulse lights —
+ *              a visual representation of the GENERAL risk level, NEVER a
+ *              lesion, tumor or localized zone (see the noDiagnosis note).
+*  label  : optional override for the risk text (defaults to the i18n risk key)
+ *   percent: 0..100 — analysis progress while 'analyzing', otherwise the
+ *            probability expressed as a percentage (probability * 100).
  *
  * IMPORTANT: the Three.js renderer is initialised lazily and guarded for
  * WebGL support. In non-WebGL environments (e.g. the happy-dom test runner)
@@ -60,13 +67,110 @@ const props = defineProps({
   state: {
     type: String,
     default: 'idle',
-    validator: (v) => ['idle', 'analyzing', 'result', 'zone'].includes(v),
+    validator: (v) => ['idle', 'analyzing', 'low', 'medium', 'high'].includes(v),
   },
   label: { type: String, default: '' },
   percent: { type: Number, default: 0 },
 })
 
 const pct = computed(() => Math.max(0, Math.min(100, Math.round(props.percent))))
+
+// ---------------------------------------------------------------------------
+// Visual risk levels (presentation-only — see src/riskLevels.js)
+// ---------------------------------------------------------------------------
+// Relative zoom applied over the FIT_SIZE normalisation so the anatomical brain
+// fills a bit more of its card (10-15%) without touching the layout or 50/50.
+const BRAIN_ZOOM = 1.12
+
+/** Risk colors: green (LOW), golden (MEDIUM), red (HIGH) — abstract "system" glow. */
+const RISK_COLORS = { low: 0x4cd98a, medium: 0xf4c95d, high: 0xff5a5a }
+/**
+ * Base emissive intensity on the brain surface per level. LOW/MEDIUM are
+ * deliberately brighter than before so green and golden clearly read on the
+ * sulci while RED stays the most evident (high stays the strongest tint).
+ */
+const RISK_EMISSIVE = { low: 0.3, medium: 0.36, high: 0.4 }
+/** Base intensity of the surrounding risk point lights per level. */
+const RISK_LIGHT = { low: 2.2, medium: 2.9, high: 3.2 }
+/**
+ * Pulse rhythm per level: slower/softer breathing for LOW, faster for HIGH,
+ * modulated over the (brighter) base so the glow stays calm, not flashy.
+ */
+const RISK_PULSE = {
+  low: { freq: 0.55, depth: 0.18 },
+  medium: { freq: 0.9, depth: 0.26 },
+  high: { freq: 1.4, depth: 0.34 },
+}
+
+// Live risk state (module-level so the render loop can pulse it cheaply; the
+// value is reset on unmount and re-applied on mount from the prop).
+let currentRisk = 'idle'
+let riskColor = new THREE.Color(RISK_COLORS.low)
+let riskEmissiveBase = 0
+let riskLightBase = 0
+let riskFreq = 0
+let riskDepth = 0
+
+/** Flat list of PBR materials of the loaded brain (cached for the per-frame glow). */
+const brainMaterials = []
+/** Abstract lights + tiny dots distributed around the brain shell. */
+const riskLights = []
+const riskDots = []
+
+/**
+ * Switch the 3D risk visualization on/off. Colors are applied to the brain
+ * materials immediately; intensities are animated by the render loop, so an
+ * idle/analyzing state simply zeroes them (neutral, no invented level).
+ */
+function applyRisk(newState) {
+  currentRisk = ['low', 'medium', 'high'].includes(newState) ? newState : 'idle'
+  if (currentRisk === 'idle') {
+    riskEmissiveBase = 0
+    riskLightBase = 0
+    riskFreq = 0
+    riskDepth = 0
+  } else {
+    riskColor.set(RISK_COLORS[currentRisk])
+    riskEmissiveBase = RISK_EMISSIVE[currentRisk]
+    riskLightBase = RISK_LIGHT[currentRisk]
+    riskFreq = RISK_PULSE[currentRisk].freq
+    riskDepth = RISK_PULSE[currentRisk].depth
+  }
+  for (const mat of brainMaterials) {
+    mat.emissive.copy(riskColor)
+    if (mat.needsUpdate !== undefined) mat.needsUpdate = true
+  }
+  for (const light of riskLights) light.color.copy(riskColor)
+  for (const dot of riskDots) dot.material.color.copy(riskColor)
+}
+
+// Follow the prop: the risk state is driven by the REAL model result
+// (probability -> riskLevel -> Brain3D state), never fetched here.
+watch(
+  () => props.state,
+  (s) => applyRisk(s),
+)
+
+/** True while a definitive visual risk level is active. */
+const isRiskState = computed(() =>
+  ['low', 'medium', 'high'].includes(props.state),
+)
+
+/**
+ * Risk text shown beside the color. Defaults to the i18n risk label; the
+ * `label` prop can override it (used by tests / future callers).
+ */
+const riskLabel = computed(() => {
+  if (!isRiskState.value) return ''
+  if (props.label) return props.label
+  const key =
+    props.state === 'low'
+      ? 'risk.levelLow'
+      : props.state === 'medium'
+        ? 'risk.levelMedium'
+        : 'risk.levelHigh'
+  return t(key)
+})
 
 // ---------------------------------------------------------------------------
 // 3D scene element (mounted in the template)
@@ -173,7 +277,19 @@ function loadBrainModel(scene) {
       const root = gltf.scene
       normalizeModel(root)
       flattenBrainFinish(root)
+      // Presentation zoom: fills more of the card (layout untouched).
+      root.scale.multiplyScalar(BRAIN_ZOOM)
+      // Cache the PBR materials so the risk glow can pulse them cheaply.
+      root.traverse((child) => {
+        if (!child.isMesh || !child.material) return
+        const mats = Array.isArray(child.material) ? child.material : [child.material]
+        for (const mat of mats) {
+          if (mat && !brainMaterials.includes(mat)) brainMaterials.push(mat)
+        }
+      })
       scene.add(root)
+      // Re-apply the risk coloring now that the materials exist.
+      applyRisk(props.state)
       resolve()
     }
     loader.load(
@@ -247,6 +363,24 @@ function animate() {
   frameId = requestAnimationFrame(animate)
   if (!renderer || !scene || !camera || !controls) return
   if (!wasVisible) return
+
+  // Risk glow pulse: LOW breathes slow and soft, MEDIUM moderate, HIGH more
+  // evident — applied to the brain emissive, the shell lights and the dots.
+  // Dot opacity baseline is kept HIGH so green/gold points stay clearly
+  // perceptible between the sulci even at the calmest point of the wave.
+  const riskOn = currentRisk === 'low' || currentRisk === 'medium' || currentRisk === 'high'
+  const wave = riskOn && !respectReducedMotion
+    ? Math.sin(2 * Math.PI * riskFreq * (performance.now() / 1000))
+    : 0
+  const ei = riskOn ? riskEmissiveBase * (1 + riskDepth * wave) : 0
+  const li = riskOn ? riskLightBase * (1 + riskDepth * wave) : 0
+  const di = riskOn ? 0.75 + 0.25 * wave : 0
+  for (const mat of brainMaterials) {
+    if (mat.emissiveIntensity !== ei) mat.emissiveIntensity = ei
+  }
+  for (const light of riskLights) light.intensity = li
+  for (const dot of riskDots) dot.material.opacity = di
+
   if (respectReducedMotion) {
     // Still honor a single render so the scene isn't blank.
     controls.update()
@@ -307,10 +441,44 @@ function initThree() {
   rimLight.position.set(-1.5, 0.5, 2.5)
   scene.add(rimLight)
 
+  // Risk visualization lights + dots: an abstract shell distributed around the
+  // brain (golden-angle spiral, biased toward the front hemisphere the camera
+  // sees). They are pure "system glow" — they NEVER mark a lesion, tumor or
+  // localized zone; only the TOP-LEVEL category (LOW/MEDIUM/HIGH) is conveyed.
+  const RISK_SHELL_RADIUS = 2.35
+  const RISK_SPOTS = 8
+  for (let i = 0; i < RISK_SPOTS; i += 1) {
+    const phi = Math.acos(1 - (2 * (i + 0.5)) / RISK_SPOTS)
+    const theta = Math.PI * (1 + Math.sqrt(5)) * i
+    const pos = new THREE.Vector3(
+      RISK_SHELL_RADIUS * Math.sin(phi) * Math.cos(theta),
+      RISK_SHELL_RADIUS * Math.cos(phi) * 0.75,
+      RISK_SHELL_RADIUS * Math.sin(phi) * Math.sin(theta),
+    )
+    if (pos.z < -0.4) pos.z = -pos.z // keep them in the visible hemisphere
+
+    const light = new THREE.PointLight(riskColor, 0, RISK_SHELL_RADIUS * 2.2, 1.6)
+    light.position.copy(pos)
+    scene.add(light)
+    riskLights.push(light)
+
+    const dotMat = new THREE.MeshBasicMaterial({
+      color: riskColor,
+      transparent: true,
+      opacity: 0,
+    })
+    const dot = new THREE.Mesh(new THREE.SphereGeometry(0.05, 12, 8), dotMat)
+    dot.position.copy(pos)
+    scene.add(dot)
+    riskDots.push(dot)
+  }
+
   // Anatomical brain model (loaded async; normalised + added to the scene).
   loadBrainModel(scene).then(() => {
     // Repaint toward the current theme once the textured model is present.
     applyPalette()
+    // Risk coloring already applied in onLoad; make sure it matches the prop.
+    applyRisk(props.state)
     // Center the auto-rotate target on the fitted model.
     if (controls) controls.target.set(0, 0, 0)
   })
@@ -371,6 +539,8 @@ function resizeRenderer() {
 // ---------------------------------------------------------------------------
 onMounted(() => {
   initThree()
+  // Apply the initial risk level (neutral unless a real result is present).
+  applyRisk(props.state)
   // React to theme changes (light/dark) without touching the global theme system.
   themeWatcher = watch(
     () => storeState.theme,
@@ -385,6 +555,16 @@ let themeWatcher = null
 onBeforeUnmount(() => {
   if (themeWatcher) themeWatcher()
   themeWatcher = null
+
+  // Reset the module-level risk state for a clean remount.
+  currentRisk = 'idle'
+  riskEmissiveBase = 0
+  riskLightBase = 0
+  riskFreq = 0
+  riskDepth = 0
+  brainMaterials.length = 0
+  riskLights.length = 0
+  riskDots.length = 0
 
   if (frameId) cancelAnimationFrame(frameId)
   frameId = null
@@ -434,12 +614,10 @@ onBeforeUnmount(() => {
 
     <!-- State-dependent copy (kept for accessibility, i18n and tests) -->
     <div class="brain__content">
-      <template v-if="state === 'idle'">
-        <h3 class="brain__title">{{ t('brain.ready') }}</h3>
-        <p class="brain__text">{{ t('brain.readyHint') }}</p>
-      </template>
+      <!-- idle: neutral — no "NEURAL SYSTEM" text, no risk level, the brain
+           itself is the message (only the disclaimer stays) -->
 
-      <template v-else-if="state === 'analyzing'">
+      <template v-if="state === 'analyzing'">
         <h3 class="brain__title brain__title--pulse">{{ t('brain.analyzing') }}</h3>
         <p class="brain__hint">{{ t('brain.analyzingHint') }}</p>
         <div class="brain__progress" role="progressbar" :aria-valuenow="pct" aria-valuemin="0" aria-valuemax="100">
@@ -448,17 +626,12 @@ onBeforeUnmount(() => {
         <span class="brain__percent">{{ pct }}%</span>
       </template>
 
-      <template v-else-if="state === 'result'">
-        <h3 class="brain__title">{{ t('brain.riskLabel') }}</h3>
-        <p v-if="label" class="brain__label">{{ label }}</p>
-        <p class="brain__text">{{ t('brain.riskText') }}</p>
-      </template>
-
-      <template v-else-if="state === 'zone'">
-        <h3 class="brain__title">{{ t('brain.zoneLabel') }}</h3>
-        <span class="brain__chip">{{ t('imageAnalysis.zoneOfInterest') }}</span>
-        <p class="brain__text">{{ t('brain.zoneText') }}</p>
-        <p class="brain__subtext">{{ t('brain.zoneSubtext') }}</p>
+      <!-- Risk states: text label ALWAYS accompanies the color (accessibility).
+           LOW/MEDIUM/ELEVATED are general categories from the REAL model
+           probability — never a lesion, tumor or localized zone. -->
+      <template v-else-if="isRiskState">
+        <span class="brain__chip" :class="`brain__chip--${state}`">{{ riskLabel }}</span>
+        <span class="brain__risk-pct">{{ pct }}%</span>
       </template>
 
       <p class="brain__note">{{ t('brain.noDiagnosis') }}</p>
@@ -584,6 +757,44 @@ onBeforeUnmount(() => {
 
 :root[data-theme='dark'] .brain__chip {
   color: var(--color-accent);
+}
+
+/* Risk color variants — green / gold / red, always paired with text (a11y). */
+.brain__chip--low {
+  color: #2fae6e;
+  background: rgba(76, 217, 138, 0.12);
+  border-color: rgba(76, 217, 138, 0.35);
+}
+
+.brain__chip--medium {
+  color: var(--color-accent-strong);
+  background: rgba(217, 169, 40, 0.12);
+  border-color: rgba(217, 169, 40, 0.35);
+}
+
+.brain__chip--high {
+  color: #e54444;
+  background: rgba(255, 90, 90, 0.12);
+  border-color: rgba(255, 90, 90, 0.38);
+}
+
+:root[data-theme='dark'] .brain__chip--low {
+  color: #4cd98a;
+}
+
+:root[data-theme='dark'] .brain__chip--medium {
+  color: var(--color-accent);
+}
+
+:root[data-theme='dark'] .brain__chip--high {
+  color: #ff7a7a;
+}
+
+.brain__risk-pct {
+  font-size: 15px;
+  font-weight: var(--w-700);
+  letter-spacing: 0.02em;
+  color: var(--color-primary);
 }
 
 .brain__percent {

@@ -1,7 +1,8 @@
 <script setup>
 /**
- * App header: F5 RiskAI identity, current module, theme toggle, language
- * selector (ES|EN), notifications and a visual user avatar/dropdown (UI only).
+ * App header: F5 RiskAI identity, current module, language selector (ES|EN),
+ * theme toggle and a visual user avatar/dropdown (UI only). The old
+ * notification bell was removed from the scope of the app (no backend events).
  * Theme + language are global (store.js) and persist across reloads.
  */
 import { ref } from 'vue'
@@ -11,7 +12,6 @@ defineEmits(['toggle-sidebar'])
 
 const moduleName = ref(t('module'))
 const userName = 'Dra. M. Ruiz'
-const notificationDot = true
 
 const profileOpen = ref(false)
 
@@ -27,7 +27,7 @@ function switchLang(lang) {
         <button
           class="app-header__menu"
           type="button"
-          :aria-label="t('notifications')"
+          :aria-label="t('menuToggle')"
           @click="$emit('toggle-sidebar')"
         >
           <svg viewBox="0 0 24 24" aria-hidden="true" class="app-header__menu-icon">
@@ -84,20 +84,6 @@ function switchLang(lang) {
           <svg v-else viewBox="0 0 24 24" aria-hidden="true" class="app-header__icon">
             <path d="M12 3a9 9 0 1 0 9 9c0-.5-.4-1-1-1h-1a4 4 0 0 1-4-4V6a5 5 0 0 1 5-5h1a1 1 0 0 0 0-2 9 9 0 0 0-9 0h-1Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
           </svg>
-        </button>
-
-        <button class="app-header__icon-btn" type="button" :aria-label="t('notifications')">
-          <svg viewBox="0 0 24 24" aria-hidden="true" class="app-header__icon">
-            <path
-              d="M12 3a5.5 5.5 0 0 0-5.5 5.5v2.6L5 15h14l-1.5-3.9V8.5A5.5 5.5 0 0 0 12 3Zm-2.5 13.5a2.5 2.5 0 0 0 5 0"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.7"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <span v-if="notificationDot" class="app-header__dot" aria-hidden="true"></span>
         </button>
 
         <div class="app-header__profile">
@@ -215,7 +201,8 @@ function switchLang(lang) {
 .app-header__right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  margin-left: 10px;
 }
 
 /* Language selector ES | EN */
@@ -269,17 +256,6 @@ function switchLang(lang) {
 .app-header__icon {
   width: 21px;
   height: 21px;
-}
-
-.app-header__dot {
-  position: absolute;
-  top: 9px;
-  right: 10px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--color-accent);
-  border: 2px solid var(--color-card);
 }
 
 .app-header__profile {

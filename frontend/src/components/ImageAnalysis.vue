@@ -6,12 +6,22 @@
  *   - Camera (UI + getUserMedia wiring prepared, no model)
  *   - Upload an image (file input + preview via FileReader)
  *
+ * UNDER CONSTRUCTION (reorganización Inicio / Análisis):
+ *   - CNN_READY = false: el "Análisis de imagen" está deshabilitado. NO se
+ *     ejecuta ninguna animación de "análisis" ni se emite @analyze, porque eso
+ *     simularía una predicción que no existe (no hay modelo CNN conectado).
+ *   - NO se muestran resultados del análisis de imagen: sin "Image Analysis
+ *     Result", sin Grad-CAM / Activation Map, sin Brain3D dentro de esta vista.
+ *     El cerebro 3D con su nivel de riesgo vive únicamente en Inicio (Dashboard).
+ *   - La interfaz (tarjetas cámara / subir imagen / previsualización) permanece
+ *     visible tal cual, solo con la acción de análisis bloqueada.
+ *
  * States handled here (never invents results):
  *   idle      -> no image yet
  *   camera    -> camera view active
  *   preview   -> image selected with preview
- *   analyzing -> UI animation only (no real CNN call)
- *   result    -> external `result` prop provided by the parent (prepared)
+ *   analyzing -> UI animation only (no real CNN call) — DISABLED (CNN_READY)
+ *   result    -> external `result` prop provided by the parent (future CNN)
  *   error     -> file read failed
  *
  * Emits:
@@ -19,11 +29,16 @@
  */
 import { ref, computed, watch } from 'vue'
 import { t } from '@/store.js'
-import Brain3D from './Brain3D.vue'
-import ImageResult from './ImageResult.vue'
 import AnalysisStatus from './AnalysisStatus.vue'
 
 const emit = defineEmits(['analyze'])
+
+/**
+ * The real CNN model is NOT connected yet. Keep this false until a real image
+ * endpoint/model exists; while false, "Analizar imagen" is disabled and no
+ * fake prediction animation runs.
+ */
+const CNN_READY = false
 
 const props = defineProps({
   /* Future CNN probability result (null by default). */
@@ -121,7 +136,9 @@ function clearImage() {
 
 function runAnalysis() {
   if (source.value !== 'preview') return
-  // UI-only analysis animation. The real CNN is NOT called yet.
+  // UNDER CONSTRUCTION: no real CNN model connected yet. The previous UI-only
+  // animation simulated a prediction that does not exist; it is now disabled.
+  if (!CNN_READY) return
   analyzing.value = true
   emit('analyze', previewUrl.value)
 }
@@ -230,45 +247,23 @@ function runAnalysis() {
           <button
             type="button"
             class="ian__primary"
-            :disabled="analyzing"
+            :disabled="analyzing || !CNN_READY"
+            :title="CNN_READY ? '' : t('imageAnalysis.notReady')"
             @click="runAnalysis"
           >
             {{ analyzing ? t('imageAnalysis.analyzingImage') : t('imageAnalysis.analyzeImage') }}
           </button>
         </div>
+        <p v-if="!CNN_READY && source === 'preview'" class="ian__note" role="status">
+          {{ t('imageAnalysis.notReady') }} — {{ t('proximamente') }}
+        </p>
       </div>
 
       <p v-if="readError" class="ian__error" role="alert">{{ readError }}</p>
     </div>
 
-    <!-- RESULT / HEATMAP / BRAIN 3D (prepared for future) -->
-    <div class="ian__results">
-      <div class="ian__result-card">
-        <h4 class="ian__result-title">{{ t('imageResult.title') }}</h4>
-        <ImageResult :result="result" />
-      </div>
-
-      <div class="ian__result-card">
-        <h4 class="ian__result-title">{{ t('imageAnalysis.gradCamTitle') }}</h4>
-        <div class="ian__grad">
-          <span class="ian__grad-tag">{{ t('imageAnalysis.zoneOfInterest') }}</span>
-          <p class="ian__grad-hint">{{ t('imageAnalysis.gradCamHint') }}</p>
-        </div>
-      </div>
-
-      <div class="ian__result-card">
-        <h4 class="ian__result-title">{{ t('brain.title') }}</h4>
-        <Brain3D
-          :state="analyzing ? 'analyzing' : 'idle'"
-          :percent="analyzing ? 46 : 0"
-        />
-        <div class="ian__source">
-          <span>{{ t('imageAnalysis.originalLabel') }} →</span>
-          <span>{{ t('imageAnalysis.heatmapLabel') }} →</span>
-          <span>Brain3D</span>
-        </div>
-      </div>
-    </div>
+    <!-- Nada más: no Image Analysis Result, no Grad-CAM, no Brain3D here.
+         The real CNN result (when it exists) will render in this slot. -->
   </section>
 </template>
 
@@ -475,66 +470,15 @@ function runAnalysis() {
   color: var(--color-risk);
 }
 
-.ian__results {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 18px;
-  margin-top: 6px;
-}
-
-.ian__result-card {
-  background: var(--color-card);
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-md);
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.ian__result-title {
-  font-size: 13px;
-  font-weight: var(--w-700);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-accent-strong);
-}
-
-.ian__grad {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.ian__note {
+  font-size: 12.5px;
+  font-weight: var(--w-600);
+  color: var(--color-ink-mute);
+  background: var(--color-canvas-soft);
   border: 1px dashed var(--color-hairline);
   border-radius: var(--radius-md);
-  padding: 18px;
+  padding: 10px 14px;
   text-align: center;
-  flex: 1;
-}
-
-.ian__grad-tag {
-  align-self: center;
-  font-size: 11px;
-  font-weight: var(--w-700);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: var(--color-accent-strong);
-  background: rgba(217, 169, 40, 0.12);
-  border: 1px solid rgba(217, 169, 40, 0.28);
-  border-radius: var(--radius-pill);
-  padding: 5px 14px;
-}
-
-.ian__grad-hint {
-  font-size: 12.5px;
-  color: var(--color-ink-mute);
-}
-
-.ian__source {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  font-size: 11px;
-  color: var(--color-ink-faint);
 }
 
 @keyframes scan {
@@ -543,12 +487,6 @@ function runAnalysis() {
   }
   100% {
     transform: translateY(100%);
-  }
-}
-
-@media (max-width: 980px) {
-  .ian__results {
-    grid-template-columns: 1fr;
   }
 }
 </style>
