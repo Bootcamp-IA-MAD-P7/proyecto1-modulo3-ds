@@ -31,6 +31,26 @@ except ImportError:  # pragma: no cover - dotenv is a dependency, keep it option
 
 DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 
+
+def normalize_database_url(url: str) -> str:
+    """Force SQLAlchemy to use psycopg v3 with a plain Render-style URL.
+
+    SQLAlchemy resolves a bare ``postgresql://`` (or the legacy ``postgres://``)
+    scheme to the **psycopg2** dialect by default, and this project does not
+    install psycopg2 (it uses psycopg v3, driver ``postgresql+psycopg://``).
+    Render provides its ``Internal Database URL`` exactly in that bare form,
+    so the scheme is rewritten to ``postgresql+psycopg://``. Explicit URLs
+    (Docker Compose already uses ``postgresql+psycopg://``) and
+    non-PostgreSQL URLs (SQLite in tests) are left untouched.
+    """
+    for prefix in ("postgresql://", "postgres://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix) :]
+    return url
+
+
+DATABASE_URL = normalize_database_url(DATABASE_URL)
+
 _engine = create_engine(DATABASE_URL, pool_pre_ping=True) if DATABASE_URL else None
 _SessionLocal = sessionmaker(bind=_engine, autoflush=False, expire_on_commit=False) if _engine else None
 

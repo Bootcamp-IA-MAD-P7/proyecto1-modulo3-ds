@@ -22,7 +22,9 @@ import time
 
 from sqlalchemy import create_engine, text
 
-url = os.environ.get("DATABASE_URL", "").strip()
+from backend.database import normalize_database_url
+
+url = normalize_database_url(os.environ.get("DATABASE_URL", "").strip())
 if not url:
     raise SystemExit("DATABASE_URL is not set. Cannot start without a database.")
 

@@ -1,0 +1,5 @@
+# Shell entrypoints must stay LF in every checkout: a CRLF shebang
+# (#!/bin/sh\r) makes the kernel fail to exec the script, which would break
+# the Docker images both locally and on Render. `core.autocrlf=true` (common
+# on Windows) converts checked-out files to CRLF, so pin the canonical form.
+*.sh text eol=lf

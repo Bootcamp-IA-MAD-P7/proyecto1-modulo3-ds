@@ -13,7 +13,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from backend.database import Base
+from backend.database import Base, normalize_database_url
 from backend import models  # noqa: F401  (registers the tables on Base.metadata)
 
 config = context.config
@@ -25,7 +25,10 @@ target_metadata = Base.metadata
 
 
 def _database_url() -> str:
-    url = os.getenv("DATABASE_URL", "").strip()
+    # normalize_database_url() maps Render's bare postgresql:// URL to the
+    # psycopg v3 driver (postgresql+psycopg://); compose-style explicit URLs
+    # and SQLite pass through unchanged.
+    url = normalize_database_url(os.getenv("DATABASE_URL", "").strip())
     if not url:
         raise RuntimeError(
             "DATABASE_URL no está definida. Copia .env.example a .env y "
