@@ -64,7 +64,21 @@ import ImageAnalysis from '@/components/ImageAnalysis.vue'
         </div>
       </div>
 
-      <ImageAnalysis />
+      <div class="analyse__overlay-wrap">
+        <ImageAnalysis />
+        <div class="analyse__overlay" aria-hidden="true">
+          <span class="analyse__overlay-badge">
+            <svg class="analyse__badge-helmet" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12.5A7 7 0 0 1 19 12.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              <path d="M12 5.5V4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+              <path d="M7.2 9.8h9.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              <path d="M3.5 14.6h17a1.2 1.2 0 0 1 0 2.4h-17a1.2 1.2 0 0 1 0-2.4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+            </svg>
+            {{ t('construction.badge') }}
+          </span>
+          <span class="analyse__overlay-text">{{ t('construction.overlay') }}</span>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -194,5 +208,48 @@ import ImageAnalysis from '@/components/ImageAnalysis.vue'
 
 .panel--image {
   margin-top: 24px;
+}
+
+/* ── Under-construction overlay (semi-transparent, blocks interaction) ── */
+.analyse__overlay-wrap {
+  position: relative;
+}
+
+.analyse__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  background: var(--color-card-glass);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.analyse__overlay-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: var(--w-700);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent-strong);
+  background: rgba(217, 169, 40, 0.12);
+  border: 1px solid rgba(217, 169, 40, 0.35);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+}
+
+.analyse__overlay-text {
+  font-size: 13px;
+  color: var(--color-ink-mute);
+  max-width: 320px;
 }
 </style>

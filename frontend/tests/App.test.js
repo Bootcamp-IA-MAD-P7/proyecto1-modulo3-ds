@@ -1,7 +1,16 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import router from '@/router'
 import App from '@/App.vue'
+
+// The default route renders the Dashboard (and its SummaryCards row), which
+// fetches real statistics — mock the service so the shell test stays offline.
+vi.mock('@/services/predictionService.js', () => ({
+  predictStroke: vi.fn(),
+  listPatients: vi.fn().mockResolvedValue([]),
+  listAssessments: vi.fn().mockResolvedValue([]),
+  checkHealth: vi.fn().mockResolvedValue(true),
+}))
 
 describe('App', () => {
   it('mounts successfully with the router', async () => {

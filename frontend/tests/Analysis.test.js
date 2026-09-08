@@ -46,4 +46,13 @@ describe('Analysis view (EN CONSTRUCCIÓN)', () => {
     expect(wrapper.text()).not.toContain(translations.es.imageResult.notConnected)
     expect(wrapper.text().toLowerCase()).not.toContain('brain3d')
   })
+
+  it('shows a semi-transparent under-construction overlay on the image analysis interface', () => {
+    const wrapper = mount(Analysis)
+    const overlay = wrapper.find('.analyse__overlay')
+    expect(overlay.exists()).toBe(true)
+    expect(overlay.attributes('aria-hidden')).toBe('true')
+    expect(overlay.text()).toContain(translations.es.construction.badge)
+    expect(overlay.text()).toContain(translations.es.construction.overlay)
+  })
 })

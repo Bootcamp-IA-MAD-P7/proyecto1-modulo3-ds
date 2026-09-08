@@ -7,9 +7,17 @@ import NeuralVisualization from '@/components/NeuralVisualization.vue'
 // Mock the service so tests exercise the component orchestration without a backend.
 vi.mock('@/services/predictionService.js', () => ({
   predictStroke: vi.fn(),
+  listPatients: vi.fn(),
+  listAssessments: vi.fn(),
+  checkHealth: vi.fn(),
 }))
 
-import { predictStroke } from '@/services/predictionService.js'
+import {
+  predictStroke,
+  listPatients,
+  listAssessments,
+  checkHealth,
+} from '@/services/predictionService.js'
 
 const VALID = {
   gender: 'Female',
@@ -45,6 +53,10 @@ describe('Dashboard', () => {
 
   beforeEach(() => {
     vi.resetAllMocks()
+    // SummaryCards statistics: sane per-test defaults (empty registry).
+    listPatients.mockResolvedValue([])
+    listAssessments.mockResolvedValue([])
+    checkHealth.mockResolvedValue(true)
     document.body.innerHTML = ''
   })
 
@@ -58,11 +70,13 @@ describe('Dashboard', () => {
     expect(wrapper.findComponent(NeuralVisualization).exists()).toBe(false)
   })
 
-  it('renders the Análisis panel (Brain3D) with the analysis summary on the Inicio view', () => {
+  it('renders the Análisis panel (Brain3D) without its title on the Inicio view', () => {
     wrapper = mount(Dashboard)
-    // Right column panel is simply titled "Análisis" — no NEURAL VISUALIZATION
-    // eyebrow, no "Cerebro 3D" title, no NEURAL SYSTEM text anymore.
-    expect(wrapper.find('.panel--brain .card-head__title').text()).toBe('Análisis')
+    // The brain panel no longer has an "Análisis" heading — the enlarged
+    // Brain3D takes the full panel width.
+    expect(wrapper.findComponent(Brain3D).exists()).toBe(true)
+    expect(wrapper.find('.panel--brain .card-head').exists()).toBe(false)
+    expect(wrapper.find('.panel--brain').text()).not.toContain('Análisis')
     expect(wrapper.text()).not.toContain('Neural Visualization')
     expect(wrapper.text()).not.toContain('Cerebro 3D')
     expect(wrapper.text()).not.toContain('NEURAL SYSTEM')
@@ -176,6 +190,34 @@ async function nextTicks(n = 3) {
     expect(wrapper.find('.panel--result').exists()).toBe(true)
     expect(wrapper.find('.dashboard__info').exists()).toBe(true)
   })
+
+  it('refreshes the summary statistics when the assessment was persisted (auto-update)', async () => {
+    predictStroke.mockResolvedValue({
+      prediction: 0,
+      probability: 0.3,
+      assessment_id: '11111111-1111-1111-1111-111111111111',
+    })
+    wrapper = mount(Dashboard)
+    await submitForm(wrapper)
+
+    // Mount-time load + the refresh triggered by the persisted assessment_id.
+    expect(listPatients).toHaveBeenCalledTimes(2)
+    expect(listAssessments).toHaveBeenCalledTimes(2)
+  })
+
+  it('keeps the statistics untouched when persistence did not happen (no assessment_id)', async () => {
+    predictStroke.mockResolvedValue({
+      prediction: 0,
+      probability: 0.3,
+      assessment_id: null,
+    })
+    wrapper = mount(Dashboard)
+    await submitForm(wrapper)
+
+    // Single mount-time load; no refresh without a persisted assessment.
+    expect(listPatients).toHaveBeenCalledTimes(1)
+    expect(listAssessments).toHaveBeenCalledTimes(1)
+  })
 })
 
 describe('Dashboard brain risk levels (driven by the REAL model probability)', () => {
@@ -183,6 +225,10 @@ describe('Dashboard brain risk levels (driven by the REAL model probability)', (
 
   beforeEach(() => {
     vi.resetAllMocks()
+    // SummaryCards statistics: sane per-test defaults (empty registry).
+    listPatients.mockResolvedValue([])
+    listAssessments.mockResolvedValue([])
+    checkHealth.mockResolvedValue(true)
     document.body.innerHTML = ''
   })
 
@@ -206,22 +252,22 @@ describe('Dashboard brain risk levels (driven by the REAL model probability)', (
     expect(wrapper.find('.dashboard__summary .dashboard__summary-value').text()).toBe('20%')
   })
 
-  it('mapping: 0.30 -> MEDIUM risk', async () => {
+  it('mapping: 0.30 -> LOW risk (threshold moved to 0.45)', async () => {
     await submitWithProbability(0.3)
-    expect(wrapper.findComponent(Brain3D).props('state')).toBe('medium')
-    expect(wrapper.text()).toContain('RIESGO MEDIO')
+    expect(wrapper.findComponent(Brain3D).props('state')).toBe('low')
+    expect(wrapper.text()).toContain('RIESGO BAJO')
   })
 
-  it('mapping: 0.45 -> MEDIUM risk', async () => {
+  it('mapping: 0.45 -> MEDIUM risk (lower bound)', async () => {
     await submitWithProbability(0.45)
     expect(wrapper.findComponent(Brain3D).props('state')).toBe('medium')
     expect(wrapper.text()).toContain('RIESGO MEDIO')
   })
 
-  it('mapping: 0.50 -> HIGH risk (boundary)', async () => {
+  it('mapping: 0.50 -> MEDIUM risk', async () => {
     await submitWithProbability(0.5)
-    expect(wrapper.findComponent(Brain3D).props('state')).toBe('high')
-    expect(wrapper.text()).toContain('RIESGO ELEVADO')
+    expect(wrapper.findComponent(Brain3D).props('state')).toBe('medium')
+    expect(wrapper.text()).toContain('RIESGO MEDIO')
   })
 
   it('mapping: 0.72 -> HIGH risk with the real 72% probability', async () => {

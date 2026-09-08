@@ -20,10 +20,12 @@ Desarrollar un modelo de Machine Learning capaz de estimar el riesgo de ictus ba
 |---|---|
 | Lenguaje | Python >= 3.10 |
 | Análisis de datos | pandas, numpy |
-| Machine Learning | scikit-learn |
+| Machine Learning | scikit-learn, imbalanced-learn, LightGBM |
 | Visualización | matplotlib, seaborn |
-| Backend | FastAPI (futuro) |
-| Frontend | Vue.js (futuro) |
+| Backend | FastAPI + SQLAlchemy + Alembic |
+| Base de datos | PostgreSQL (psycopg v3) |
+| Reportes | ReportLab (PDF) |
+| Frontend | Vue 3 + Vite + Vitest |
 | Control de versiones | Git / GitHub |
 
 ## Project Structure
@@ -93,6 +95,77 @@ source .venv/bin/activate
 
 # Instalar dependencias
 pip install -r requirements.txt
+```
+
+## Persistencia (PostgreSQL + API)
+
+El backend persiste cada evaluación realizada desde el dashboard:
+
+- **`POST /predict`** — valida los datos (HTTP 422 si son inválidos) y devuelve
+  `{prediction, probability, risk_level, assessment_id}`. La evaluación se
+  guarda en el mismo flujo, con los mismos valores devueltos (no hay una
+  segunda predicción). Si la base de datos no está configurada o no responde,
+  la predicción se devuelve igualmente con `assessment_id: null`.
+- **`GET /patients`** — pacientes registrados (más recientes primero), cada
+  uno con su última evaluación.
+- **`GET /assessments`** — todas las evaluaciones, más recientes primero.
+- **`GET /assessments/{id}`** — detalle de una evaluación con sus factores.
+- **`GET /assessments/{id}/report`** — informe PDF (ReportLab) con los datos
+  reales de la evaluación.
+- Cuando el almacenamiento no está disponible, los endpoints de consulta
+  responden `503` con un mensaje amigable (sin detalles internos).
+
+Las evaluaciones se modelan como `patients` (1) — (N) `assessments`. Cada
+paciente se identifica por sus 10 factores clínicos reales: un caso idéntico
+ya registrado reutiliza la misma fila (dedupe por huella de factores).
+
+### Variables de entorno
+
+Copie `.env.example` a `.env` (y `frontend/.env.example` a `frontend/.env`):
+
+```bash
+DATABASE_URL=postgresql+psycopg://usuario:password@host:puerto/f5_riskai
+CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+VITE_API_URL=http://127.0.0.1:8000
+```
+
+No se incluyen credenciales reales en el repositorio.
+
+### Migraciones (Alembic)
+
+```bash
+cd backend
+alembic upgrade head        # aplica las migraciones a la base de DATABASE_URL
+alembic revision -m "..."   # nueva migración
+```
+
+La migración inicial crea `patients` y `assessments` con claves UUID
+(`gen_random_uuid()`, extensión `pgcrypto`) e índices sobre `patient_id` y
+`created_at`.
+
+### Umbrales de riesgo (única fuente)
+
+La clasificación por probabilidad es única por lado y está especificada con
+valores idénticos en `backend/risk.py` y `frontend/src/riskLevels.js`:
+
+| Nivel | Rango |
+|---|---|
+| Bajo | p < 0.45 |
+| Medio | 0.45 <= p < 0.72 |
+| Alto | p >= 0.72 |
+
+### Despliegue (Render)
+
+- **Web service (API):** `python -m uvicorn backend.main:app --host 0.0.0.0 --port $PORT`, con `DATABASE_URL` y `CORS_ORIGINS` apuntando al frontend.
+- **Static site (frontend):** build de Vite con `VITE_API_URL` apuntando al web service.
+- Ejecutar `alembic upgrade head` en el despliegue antes del primer uso.
+
+## Tests
+
+```bash
+python -m unittest discover -s tests -v   # backend (incluye tests de persistencia con SQLite aislado)
+cd frontend && npm install && npm test    # frontend (Vitest)
+cd frontend && npm run build              # build de producción
 ```
 
 ## Future Scope
