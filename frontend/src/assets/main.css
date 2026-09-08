@@ -45,6 +45,13 @@
   --color-risk-soft: rgba(180, 83, 9, 0.12);
   --color-warning: #d9a928;
 
+  /* Risk badges/chips — mirror the Brain3D palette (green / gold / red) so
+     the Patients table stays visually coherent with the 3D brain. */
+  --color-success: #2fae6e;                            /* LOW risk text */
+  --color-success-bg: rgba(76, 217, 138, 0.12);        /* LOW soft background */
+  --color-danger: #e54444;                             /* HIGH risk text */
+  --color-danger-bg: rgba(255, 90, 90, 0.12);          /* HIGH soft background */
+
   /* Hairlines / borders */
   --color-hairline: #e2e8f0;
   --color-hairline-dark: #3f3a52;
@@ -126,6 +133,12 @@
   --color-risk: #e0a35c;
   --color-risk-soft: rgba(224, 163, 92, 0.14);
   --color-warning: #f4c95d;
+
+  /* Risk badges/chips — dark theme variants (brighter text on navy). */
+  --color-success: #4cd98a;
+  --color-success-bg: rgba(76, 217, 138, 0.12);
+  --color-danger: #ff7a7a;
+  --color-danger-bg: rgba(255, 90, 90, 0.12);
 
   --color-hairline: rgba(185, 194, 208, 0.16);
   --color-hairline-dark: #3f3a52;

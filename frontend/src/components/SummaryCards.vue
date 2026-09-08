@@ -1,47 +1,141 @@
 <script setup>
 /**
  * Bottom summary row cards inspired by the reference.
- * Only real, available information is shown. Statistics that don't exist yet
- * display an honest state ("Sin base de datos" / "Sin datos históricos") —
- * never invented numbers.
+ *
+ * Real data, straight from the persistence layer:
+ *   - PACIENTES ANALIZADOS  -> GET /patients (distinct patients count)
+ *   - RIESGO PROMEDIO       -> GET /assessments (mean of stored probability)
+ *   - MODELO                -> the model actually connected (Logistic Regression)
+ *   - ESTADO DEL SISTEMA    -> GET /health (existing liveness check)
+ *
+ * States: LOADING (discreet '…') / SUCCESS / EMPTY / ERROR (brief, professional
+ * message — the dashboard never breaks). Incrementing the `refreshKey` prop
+ * (e.g. after a persisted assessment) refetches the statistics without a page
+ * reload. Only real API data is ever shown; no invented numbers.
  */
-import { computed } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { t } from '@/store.js'
+import {
+  checkHealth,
+  listAssessments,
+  listPatients,
+} from '@/services/predictionService.js'
 
-const cards = computed(() => [
-  {
-    key: 'pacientes',
-    label: t('cardsPacientes'),
-    value: t('sinBaseDatos'),
-    hint: t('cardsPacientesHint'),
-    icon: 'users',
-    tone: 'accent',
-  },
-  {
-    key: 'riesgo',
-    label: t('cardsRiesgo'),
-    value: t('sinDatosHistoricos'),
-    hint: t('cardsRiesgoHint'),
-    icon: 'gauge',
-    tone: 'accent',
-  },
-  {
-    key: 'modelo',
-    label: t('cardsModelo'),
-    value: 'Logistic Regression',
-    hint: t('cardsModeloHint'),
-    icon: 'cpu',
-    tone: 'accent',
-  },
-  {
-    key: 'sistema',
-    label: t('cardsSistema'),
-    value: t('enLinea'),
-    hint: t('cardsSistemaHint'),
-    icon: 'pulse',
-    tone: 'positive',
-  },
-])
+const props = defineProps({
+  /** Increment to force a statistics refresh (e.g. after a new persisted assessment). */
+  refreshKey: { type: Number, default: 0 },
+})
+
+const loading = ref(true)
+const pacientesError = ref(false)
+const riesgoError = ref(false)
+const patientsCount = ref(0)
+/** Mean of the stored assessment probabilities in 0..1, or null when none. */
+const averageRisk = ref(null)
+const systemOnline = ref(true)
+
+async function loadStats() {
+  loading.value = true
+  pacientesError.value = false
+  riesgoError.value = false
+
+  // Independent parallel checks: statistics depend on the storage endpoints,
+  // the system card on the existing /health liveness probe.
+  const [patientsRes, assessmentsRes, healthRes] = await Promise.allSettled([
+    listPatients(),
+    listAssessments(),
+    checkHealth(),
+  ])
+
+  if (patientsRes.status === 'fulfilled' && Array.isArray(patientsRes.value)) {
+    patientsCount.value = patientsRes.value.length
+  } else {
+    pacientesError.value = true
+  }
+
+  if (assessmentsRes.status === 'fulfilled' && Array.isArray(assessmentsRes.value)) {
+    // Guarded mapping: `Number(null)` is 0 (not NaN), so null/undefined must be
+    // excluded explicitly — otherwise a missing probability would skew the mean.
+    const probabilities = assessmentsRes.value
+      .map((a) => (a && a.probability != null ? Number(a.probability) : NaN))
+      .filter((p) => Number.isFinite(p) && p >= 0 && p <= 1)
+    averageRisk.value = probabilities.length
+      ? probabilities.reduce((sum, p) => sum + p, 0) / probabilities.length
+      : null
+  } else {
+    riesgoError.value = true
+  }
+
+  systemOnline.value = healthRes.status === 'fulfilled' && healthRes.value === true
+  loading.value = false
+}
+
+onMounted(loadStats)
+watch(() => props.refreshKey, loadStats)
+
+const cards = computed(() => {
+  const pacientes = loading.value
+    ? { value: '…', hint: '' }
+    : pacientesError.value
+      ? { value: '—', hint: t('cardsError') }
+      : {
+          value: String(patientsCount.value),
+          hint:
+            patientsCount.value > 0
+              ? t('cardsPacientesReal')
+              : t('cardsPacientesEmpty'),
+        }
+
+  const riesgo = loading.value
+    ? { value: '…', hint: '' }
+    : riesgoError.value
+      ? { value: '—', hint: t('cardsError') }
+      : averageRisk.value === null
+        ? { value: '—', hint: t('cardsRiesgoEmpty') }
+        : {
+            value: `${(averageRisk.value * 100).toFixed(1)}%`,
+            hint: t('cardsRiesgoReal'),
+          }
+
+  const sistema = loading.value
+    ? { value: '…', hint: '' }
+    : {
+        value: systemOnline.value ? t('enLinea') : t('cardsSistemaOffline'),
+        hint: '',
+        tone: systemOnline.value ? 'positive' : 'accent',
+      }
+
+  return [
+    {
+      key: 'pacientes',
+      label: t('cardsPacientes'),
+      ...pacientes,
+      icon: 'users',
+      tone: 'accent',
+    },
+    {
+      key: 'riesgo',
+      label: t('cardsRiesgo'),
+      ...riesgo,
+      icon: 'gauge',
+      tone: 'accent',
+    },
+    {
+      key: 'modelo',
+      label: t('cardsModelo'),
+      value: 'Logistic Regression',
+      hint: t('cardsModeloHint'),
+      icon: 'cpu',
+      tone: 'accent',
+    },
+    {
+      key: 'sistema',
+      label: t('cardsSistema'),
+      ...sistema,
+      icon: 'pulse',
+    },
+  ]
+})
 </script>
 
 <template>

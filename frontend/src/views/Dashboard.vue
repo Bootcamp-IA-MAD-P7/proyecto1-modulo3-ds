@@ -33,6 +33,13 @@ const modalOpen = ref(false)
 const lastPayload = ref(null)
 
 /**
+ * Incremented after every prediction that was actually persisted
+ * (assessment_id from the API) so the SummaryCards statistics refresh
+ * automatically — no manual page reload needed.
+ */
+const statsRefreshKey = ref(0)
+
+/**
  * Visual risk level for the Brain3D + summary, derived ONLY from the real
  * probability returned by POST /predict. Unusable values (missing/out of
  * range) fall back to the neutral 'idle' state — no invented level.
@@ -122,6 +129,8 @@ async function handleSubmit(payload) {
   try {
     const data = await predictStroke(payload)
     result.value = { prediction: data.prediction, probability: data.probability }
+    // The evaluation was stored in PostgreSQL -> refresh dashboard stats.
+    if (data.assessment_id) statsRefreshKey.value += 1
   } catch (err) {
     errorMessage.value =
       (err && err.message) || t('loadErrorDefault')
@@ -202,20 +211,6 @@ function closeAnalysis() {
       </section>
 
       <section class="panel panel--brain" aria-label="Análisis 3D">
-        <div class="card-head">
-          <span class="card-head__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <circle cx="5" cy="19" r="1.6" fill="currentColor" />
-              <circle cx="12" cy="6" r="1.6" fill="currentColor" />
-              <circle cx="19" cy="19" r="1.6" fill="currentColor" />
-              <path d="M6 18.5 11 7m8 12-3-6M5 19l4-3m11 3-5-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-            </svg>
-          </span>
-          <div class="card-head__text">
-            <h2 class="card-head__title">{{ t('brainPanelTitle') }}</h2>
-          </div>
-        </div>
-
         <Brain3D :state="brainState" :percent="percent" />
 
         <div class="dashboard__summary">
@@ -300,7 +295,7 @@ function closeAnalysis() {
       <ModelPerformance />
     </div>
 
-    <SummaryCards />
+    <SummaryCards :refresh-key="statsRefreshKey" />
   </div>
 
   <RiskAnalysisModal

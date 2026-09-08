@@ -644,11 +644,11 @@ onBeforeUnmount(() => {
   position: relative;
   border: 1px dashed var(--color-hairline);
   border-radius: var(--radius-md);
-  min-height: 240px;
+  min-height: 340px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 18px 16px;
+  padding: 22px 20px;
   text-align: center;
   overflow: hidden;
   background:

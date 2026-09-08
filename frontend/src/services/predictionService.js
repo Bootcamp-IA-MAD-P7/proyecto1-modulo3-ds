@@ -35,11 +35,54 @@ function toUserError(error, detail) {
   }
 }
 
+/** Extracts a user-safe `detail` string from an error response body, if any. */
+async function readDetail(response) {
+  try {
+    const body = await response.json()
+    if (body && typeof body.detail === 'string') return body.detail
+  } catch {
+    /* non-JSON error body — fall through */
+  }
+  return null
+}
+
+/** Throws a friendly error derived from an HTTP error response. */
+async function throwForStatus(response, fallbackMessage) {
+  const detail = (await readDetail(response)) || fallbackMessage
+  throw toUserError({ code: `HTTP_${response.status}` }, detail)
+}
+
+/**
+ * GET a JSON collection/object from the API with a unified error contract.
+ * @param {string} path  e.g. '/patients'
+ * @returns {Promise<any>} parsed JSON body
+ */
+async function getJson(path, errorMessage) {
+  let response
+  try {
+    response = await fetch(`${API_BASE_URL}${path}`, { method: 'GET' })
+  } catch (err) {
+    // Network failure / API is down / timeout.
+    throw toUserError(err, errorMessage)
+  }
+  if (!response.ok) {
+    await throwForStatus(response, `La API respondió con un error (HTTP ${response.status}).`)
+  }
+  try {
+    return await response.json()
+  } catch {
+    throw toUserError(
+      { code: 'BAD_JSON' },
+      'El servicio devolvió una respuesta no válida.',
+    )
+  }
+}
+
 /**
  * POST /predict with the patient data.
  *
  * @param {object} payload validated patient attributes (10 model features)
- * @returns {Promise<{prediction: 0|1, probability: number}>}
+ * @returns {Promise<{prediction: 0|1, probability: number, risk_level?: string, assessment_id?: string|null}>}
  * @throws {object} user-facing error object
  */
 export async function predictStroke(payload) {
@@ -58,19 +101,9 @@ export async function predictStroke(payload) {
   }
 
   if (!response.ok) {
-    let detail = null
-    try {
-      const body = await response.json()
-      detail =
-        body && typeof body.detail === 'string'
-          ? body.detail
-          : `La API respondió con un error (HTTP ${response.status}).`
-    } catch {
-      detail = `La API respondió con un error (HTTP ${response.status}).`
-    }
-    throw toUserError(
-      { code: `HTTP_${response.status}` },
-      detail || 'La API respondió con un error inesperado.',
+    await throwForStatus(
+      response,
+      `La API respondió con un error (HTTP ${response.status}).`,
     )
   }
 
@@ -100,10 +133,15 @@ export async function predictStroke(payload) {
     )
   }
 
-  return {
+  // The new backend fields (risk_level, assessment_id) are passed through only
+  // when the API actually provides them, so older API versions keep working.
+  const result = {
     prediction: Number(data.prediction),
     probability: Number(data.probability),
   }
+  if (data.risk_level !== undefined) result.risk_level = data.risk_level
+  if (data.assessment_id !== undefined) result.assessment_id = data.assessment_id
+  return result
 }
 
 /**
@@ -119,4 +157,40 @@ export async function checkHealth() {
   } catch {
     return false
   }
+}
+
+/**
+ * GET /patients — all persisted patients (newest first) with their most
+ * recent assessment.
+ * @returns {Promise<Array>} e.g. [{ id, created_at, gender, age, ... , last_assessment }]
+ */
+export function listPatients() {
+  return getJson('/patients', 'No se pudieron cargar los pacientes.')
+}
+
+/**
+ * GET /assessments — all assessments, newest first (History view).
+ * @returns {Promise<Array>} e.g. [{ id, patient_id, created_at, prediction, probability, risk_level }]
+ */
+export function listAssessments() {
+  return getJson('/assessments', 'No se pudieron cargar las evaluaciones.')
+}
+
+/**
+ * GET /assessments/{id} — single assessment detail with its patient snapshot.
+ * @param {string} id uuid of the assessment
+ * @returns {Promise<object>}
+ */
+export function getAssessment(id) {
+  return getJson(`/assessments/${id}`, 'No se pudo cargar la evaluación.')
+}
+
+/**
+ * Absolute URL of the PDF report for one assessment (download target).
+ * @param {string} id uuid of the assessment
+ * @param {string} [locale='es'] report language ('es' | 'en')
+ * @returns {string}
+ */
+export function assessmentReportUrl(id, locale = 'es') {
+  return `${API_BASE_URL}/assessments/${id}/report?locale=${encodeURIComponent(locale)}`
 }
