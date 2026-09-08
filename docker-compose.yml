@@ -1,0 +1,91 @@
+# F5 RiskAI — Docker Compose (development / local production-like stack).
+#
+#   docker compose build
+#   docker compose up -d
+#   docker compose down          (stop, keep the pgdata volume)
+#   docker compose down -v       (stop AND delete the database volume)
+#
+# Three services on one default bridge network:
+#   frontend (Nginx, port 8080 on host)  -> browser http://localhost:8080
+#   backend  (FastAPI, port 8000 on host)-> http://localhost:8000, /docs
+#   postgres (NOT published: internal network only)
+#
+# Service names are the hostnames inside the network: `postgres:5432`,
+# `backend:8000`. Nothing uses localhost for inter-container traffic.
+#
+# Secrets: no real credentials are committed. Values below are DEV defaults
+# interpolated from a local `.env` (see README). Override them there, never
+# in this file.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-riskai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-riskai_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-f5_riskai}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Note: PostgreSQL is intentionally NOT published to the host machine.
+    # Containers reach it over the Compose network (hostname `postgres`);
+    # to open a psql prompt: docker compose exec postgres psql -U riskai -d f5_riskai
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      # DATABASE_URL points at the `postgres` service over the Compose
+      # network (hostname `postgres`, port 5432). If you customize the
+      # password with special characters, URL-encode them here.
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-riskai}:${POSTGRES_PASSWORD:-riskai_dev_password}@postgres:5432/${POSTGRES_DB:-f5_riskai}
+      # The browser origin of the Docker frontend (Nginx on port 8080).
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:8080,http://127.0.0.1:8080}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        # Build-time variable baked into the bundle. For local Docker the
+        # browser reaches the API through the published port 8000 on the
+        # host (http://localhost:8000). For Render, rebuild with the public
+        # backend URL, e.g. VITE_API_URL=https://<api>.onrender.com
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO", "/dev/null", "http://127.0.0.1/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  pgdata:

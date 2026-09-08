@@ -1,0 +1,70 @@
+# F5 RiskAI — Render Blueprint (render.yaml)
+#
+# Despliegue con un solo push de la rama (Blueprint). Define:
+#   1. Una base de datos PostgreSQL administrada (privada, solo red interna).
+#   2. El backend (FastAPI) como Web Service Docker.
+#   3. El frontend (Vue + Nginx) como Web Service Docker.
+#
+# PRINCIPIO DE SEGURIDAD: aquí NO hay secretos ni valores de producción.
+# Las variables marcadas con `sync: false` se piden interactivamente durante
+# la creación del Blueprint (ver README, sección "DEPLOYMENT WITH RENDER").
+#
+# Referencia de esquema: https://render.com/docs/blueprint-spec
+databases:
+  - name: f5-riskai-db
+    databaseName: f5_riskai
+    user: riskai
+    plan: free
+    ipAllowList: [] # 0.0.0.0/0 NOT used: DB reachable only from Render services.
+
+services:
+  # ---------------------------------------------------------------------------
+  # API (FastAPI). Reutiliza backend/Dockerfile; el entrypoint espera a
+  # PostgreSQL, aplica `alembic upgrade head` y arranca Uvicorn en el puerto
+  # `$PORT` que Render inyecta (default 10000). Nada que configurar en
+  # runtime además de las variables de abajo.
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: f5-riskai-backend
+    runtime: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: backend/Dockerfile
+    healthCheckPath: /health
+    envVars:
+      # Cadena de conexión de la base de datos creada arriba. Render la
+      # completa automáticamente (propiedad `connectionString`).
+      - key: DATABASE_URL
+        fromDatabase:
+          name: f5-riskai-db
+          property: connectionString
+      # Orígenes permitidos por CORS, separados por comas, SIN espacios.
+      # Manual porque depende de la URL pública del frontend, que Render
+      # asigna al crear el servicio (por defecto:
+      # https://f5-riskai-frontend.onrender.com). Rellénela durante la
+      # creación del Blueprint o ajústela después en el Dashboard.
+      - key: CORS_ORIGINS
+        sync: false
+
+  # ---------------------------------------------------------------------------
+  # Frontend (Vue + Nginx). Reutiliza frontend/Dockerfile; el entrypoint
+  # renderiza el template de Nginx sobre `$PORT` y sirve el SPA.
+  # VITE_API_URL es variable de BUILD de Vite: Render traduce las variables
+  # de entorno del servicio a *build args* del Dockerfile, y el Dockerfile
+  # ya la consume como `ARG VITE_API_URL`, así que un re-build con la
+  # variable basta (sin tocar código).
+  # ---------------------------------------------------------------------------
+  - type: web
+    name: f5-riskai-frontend
+    runtime: docker
+    plan: free
+    dockerContext: .
+    dockerfilePath: frontend/Dockerfile
+    healthCheckPath: /healthz
+    envVars:
+      # URL pública del backend, SIN barra final. Manual porque depende de la
+      # URL que Render asigne al servicio backend (por defecto:
+      # https://f5-riskai-backend.onrender.com). Se usa en el build (no es
+      # un secreto; Render la pasa como build arg automáticamente).
+      - key: VITE_API_URL
+        sync: false
