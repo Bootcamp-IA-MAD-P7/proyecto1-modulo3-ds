@@ -1,0 +1,43 @@
+# Exclude everything not needed by the Docker build context.
+
+# VCS & tooling
+.git
+.config
+
+# Python
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+
+# Secrets / env files (never sent to the Docker daemon)
+.env
+.env.*
+frontend/.env
+frontend/.env.local
+
+# Node
+frontend/node_modules
+node_modules
+frontend/dist
+dist
+
+# Repo areas not used at runtime
+data
+tests
+notebooks
+reports
+docs
+models
+AppData
+
+# Transient dev-server logs (uvicorn / vite background).
+.venv_api_out.txt
+.venv_api_err.txt
+.venv_api_redesign*.txt
+.vite_out.txt
+.vite_err.txt
+frontend/.vite_out.txt
+frontend/.vite_err.txt
+*.log

@@ -1,0 +1,35 @@
+# Runtime dependencies for the F5 RiskAI API Docker image.
+#
+# This is the curated subset that the FastAPI service ACTUALLY needs at
+# runtime (backend/main.py -> scripts/predict_cli.py -> model artifact).
+# The full scientific stack (matplotlib, seaborn, lightgbm, torch,
+# transformers, ...) lives in requirements.txt and is only needed for
+# training/EDA on the host, NOT for serving predictions.
+#
+# imbalanced-learn is REQUIRED: artifacts/logistic_regression_tuned.joblib
+# is a Pipeline with steps ['preprocess', 'sampler', 'model'] where the
+# sampler is imblearn.over_sampling.RandomOverSampler (joblib.load fails
+# without it).
+#
+# Versions are pinned to match requirements.txt.
+
+pandas==3.0.5
+numpy==2.5.2
+scikit-learn==1.9.0
+joblib==1.5.3
+imbalanced-learn==0.14.2
+
+# API (backend/main.py)
+fastapi==0.141.1
+uvicorn==0.52.4
+pydantic==2.13.5
+httpx==0.28.1
+
+# Persistence PostgreSQL (SQLAlchemy + migraciones)
+sqlalchemy==2.0.52
+alembic==1.19.2
+psycopg[binary]==3.3.5
+python-dotenv==1.2.3
+
+# PDF reports (backend/reports.py)
+reportlab==5.0.1
